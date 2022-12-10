@@ -3,13 +3,13 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-12-07 Wed 18:49 -->
+<!-- 2022-12-10 Sat 10:33 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Git</title>
 <meta name="author" content="Luca Zaninotto" />
 <meta name="generator" content="Org Mode" />
-<style type="text/css">
+<style>
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,7 +193,9 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
 </style>
-<link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+<link rel="stylesheet"
+type="text/css"
+href="https://gongzhitaao.org/orgcss/org.css"/>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -214,49 +216,49 @@
              }
 });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content" class="content">
 <h1 class="title">Git</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org3582475">1. Intro</a></li>
-<li><a href="#orgda9ca51">2. Modello</a>
+<li><a href="#orge260750">Intro</a></li>
+<li><a href="#org9981851">Modello</a>
 <ul>
-<li><a href="#orgf2109f1">2.1. Cartelle e file (tree and blob)</a></li>
-<li><a href="#orgae4d1b0">2.2. Dare dei nomi</a></li>
-<li><a href="#orga31c090">2.3. Dare dei nomi migliori</a></li>
+<li><a href="#org82558d2">Cartelle e file (tree and blob)</a></li>
+<li><a href="#orgf464261">Dare dei nomi</a></li>
+<li><a href="#orgaf7fa38">Dare dei nomi migliori</a></li>
 </ul>
 </li>
-<li><a href="#org7f1613b">3. Demo</a>
+<li><a href="#org3067aa7">Demo</a>
 <ul>
-<li><a href="#org8af8079">3.1. init</a></li>
-<li><a href="#org817bac3">3.2. status</a></li>
-<li><a href="#org014697e">3.3. aggiungere qualcosa</a></li>
-<li><a href="#org8fe4720">3.4. Modificare e fare nuovo commit</a></li>
-<li><a href="#org9fd03ff">3.5. Visualizzare la storia</a></li>
-<li><a href="#org57c8328">3.6. Nomi di default</a></li>
-<li><a href="#org3d4f4a2">3.7. diff</a></li>
-<li><a href="#org77ff08e">3.8. Lavorare in parallelo</a></li>
-<li><a href="#orgb3075eb">3.9. Remotes</a></li>
+<li><a href="#orge139299">init</a></li>
+<li><a href="#orgec81002">status</a></li>
+<li><a href="#orgc087e67">aggiungere qualcosa</a></li>
+<li><a href="#org6348f01">Modificare e fare nuovo commit</a></li>
+<li><a href="#orge91e7da">Visualizzare la storia</a></li>
+<li><a href="#org663835a">Nomi di default</a></li>
+<li><a href="#orgb4cf193">diff</a></li>
+<li><a href="#org03f77d9">Lavorare in parallelo</a></li>
+<li><a href="#org3c60166">Remotes</a></li>
 </ul>
 </li>
-<li><a href="#org2be27e4">4. Credits / risorse</a></li>
+<li><a href="#orgee2a967">Credits / risorse</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org3582475" class="outline-2">
-<h2 id="org3582475"><span class="section-number-2">1.</span> Intro</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orge260750" class="outline-2">
+<h2 id="orge260750">Intro</h2>
+<div class="outline-text-2" id="text-orge260750">
 <p>
 <code>Git</code> è un software per la collaborazione e la tracciabilità di
 codice sorgente. Molti di voi avranno forse sentito parlare di
 Github. Github è una piattaforma che permette di sincronizzare
 liberamente delle repository di <code>git</code>. <code>git</code> è il vero motore alla
-base di =git=hub, e in generale è un po' il vcs standard per lavorare
+base di GitHub, e in generale è un po' il vcs standard per lavorare
 con molte persone a del codice.
 </p>
 
@@ -303,9 +305,9 @@ vengono fatte modifiche assieme.
 </div>
 </div>
 
-<div id="outline-container-orgda9ca51" class="outline-2">
-<h2 id="orgda9ca51"><span class="section-number-2">2.</span> Modello</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org9981851" class="outline-2">
+<h2 id="org9981851">Modello</h2>
+<div class="outline-text-2" id="text-org9981851">
 <p>
 Per spiegare come funziona <code>git</code>, anziché far vedere direttamente
 l'interfaccia, quindi i comandi che offre, che a mio avviso sono un
@@ -319,9 +321,9 @@ senso).
 </p>
 </div>
 
-<div id="outline-container-orgf2109f1" class="outline-3">
-<h3 id="orgf2109f1"><span class="section-number-3">2.1.</span> Cartelle e file (tree and blob)</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-org82558d2" class="outline-3">
+<h3 id="org82558d2">Cartelle e file (tree and blob)</h3>
+<div class="outline-text-3" id="text-org82558d2">
 <div class="org-src-container">
 <pre class="src src-text">&lt;root&gt; (tree)
 |
@@ -405,9 +407,9 @@ commit che includa quel file.
 </div>
 </div>
 
-<div id="outline-container-orgae4d1b0" class="outline-3">
-<h3 id="orgae4d1b0"><span class="section-number-3">2.2.</span> Dare dei nomi</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-orgf464261" class="outline-3">
+<h3 id="orgf464261">Dare dei nomi</h3>
+<div class="outline-text-3" id="text-orgf464261">
 <p>
 Una cosa che facciamo con la storia è indicare le date, ovvero dei
 punti al suo interno.
@@ -450,9 +452,9 @@ molto più grande, <code>git</code> per chi vuole approfondire usa la funzione
 </div>
 </div>
 
-<div id="outline-container-orga31c090" class="outline-3">
-<h3 id="orga31c090"><span class="section-number-3">2.3.</span> Dare dei nomi migliori</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-orgaf7fa38" class="outline-3">
+<h3 id="orgaf7fa38">Dare dei nomi migliori</h3>
+<div class="outline-text-3" id="text-orgaf7fa38">
 <p>
 Una cosa che facciamo anche con la storia vera è nominare dei punti
 con nomi più usabili: per esempio quando parlo della rivoluzione
@@ -480,9 +482,9 @@ Notare che è il nome che viene mappato alla firma, non vice versa!
 </div>
 </div>
 
-<div id="outline-container-org7f1613b" class="outline-2">
-<h2 id="org7f1613b"><span class="section-number-2">3.</span> Demo</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org3067aa7" class="outline-2">
+<h2 id="org3067aa7">Demo</h2>
+<div class="outline-text-2" id="text-org3067aa7">
 <p>
 Vedremo ora alcuni comandi base di git e come questi influiscano sul
 modello alla base. Parleremo alla fine anche di Github in maniera
@@ -507,9 +509,9 @@ cd ~/git_demo
 </div>
 </div>
 
-<div id="outline-container-org8af8079" class="outline-3">
-<h3 id="org8af8079"><span class="section-number-3">3.1.</span> init</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-orge139299" class="outline-3">
+<h3 id="orge139299">init</h3>
+<div class="outline-text-3" id="text-orge139299">
 <p>
 In primis vogliamo avere la nostra cartella su cui lavorare:
 inizializziamola:
@@ -535,9 +537,9 @@ vogliamo tracciare, github intende la cartella remota.
 </div>
 </div>
 
-<div id="outline-container-org817bac3" class="outline-3">
-<h3 id="org817bac3"><span class="section-number-3">3.2.</span> status</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-orgec81002" class="outline-3">
+<h3 id="orgec81002">status</h3>
+<div class="outline-text-3" id="text-orgec81002">
 <p>
 Una cosa molto comune è vedere <i>come è messa</i> la nostra cartella,
 come si relaziona alla nostra storia.
@@ -569,9 +571,9 @@ delle modifiche</li>
 </div>
 </div>
 
-<div id="outline-container-org014697e" class="outline-3">
-<h3 id="org014697e"><span class="section-number-3">3.3.</span> aggiungere qualcosa</h3>
-<div class="outline-text-3" id="text-3-3">
+<div id="outline-container-orgc087e67" class="outline-3">
+<h3 id="orgc087e67">aggiungere qualcosa</h3>
+<div class="outline-text-3" id="text-orgc087e67">
 <p>
 Vogliamo ora aggiungere dei file alla nostra cartella e fare un
 <code>commit</code>. Per esempio creiamo un file <code>hello.txt</code>
@@ -658,9 +660,9 @@ il riferimento <code>HEAD</code> stava puntando!
 </div>
 </div>
 
-<div id="outline-container-org8fe4720" class="outline-3">
-<h3 id="org8fe4720"><span class="section-number-3">3.4.</span> Modificare e fare nuovo commit</h3>
-<div class="outline-text-3" id="text-3-4">
+<div id="outline-container-org6348f01" class="outline-3">
+<h3 id="org6348f01">Modificare e fare nuovo commit</h3>
+<div class="outline-text-3" id="text-org6348f01">
 <p>
 Eseguire i passaggi di prima, ora però invece che creare da 0 il
 file <code>hello.txt</code> modificarlo (con editor di testo o terminale va
@@ -669,9 +671,9 @@ bene uguale).
 </div>
 </div>
 
-<div id="outline-container-org9fd03ff" class="outline-3">
-<h3 id="org9fd03ff"><span class="section-number-3">3.5.</span> Visualizzare la storia</h3>
-<div class="outline-text-3" id="text-3-5">
+<div id="outline-container-orge91e7da" class="outline-3">
+<h3 id="orge91e7da">Visualizzare la storia</h3>
+<div class="outline-text-3" id="text-orge91e7da">
 <p>
 Ok, abbiamo quindi i nostri commit&#x2026; come facciamo a vedere cosa
 sta succedendo nella nostra storia?
@@ -716,9 +718,9 @@ Ci mostrerà la struttura completa
 </div>
 </div>
 
-<div id="outline-container-org57c8328" class="outline-3">
-<h3 id="org57c8328"><span class="section-number-3">3.6.</span> Nomi di default</h3>
-<div class="outline-text-3" id="text-3-6">
+<div id="outline-container-org663835a" class="outline-3">
+<h3 id="org663835a">Nomi di default</h3>
+<div class="outline-text-3" id="text-org663835a">
 <p>
 Notiamo dall'ultimo comando (<code>git log --all --graph --decorate</code>)
 che ci sono delle informazioni aggiuntive sull'ultimo commit:
@@ -734,9 +736,9 @@ fino al commit iniziale</li>
 </div>
 </div>
 
-<div id="outline-container-org3d4f4a2" class="outline-3">
-<h3 id="org3d4f4a2"><span class="section-number-3">3.7.</span> diff</h3>
-<div class="outline-text-3" id="text-3-7">
+<div id="outline-container-orgb4cf193" class="outline-3">
+<h3 id="orgb4cf193">diff</h3>
+<div class="outline-text-3" id="text-orgb4cf193">
 <div class="org-src-container">
 <pre class="src src-sh">git diff &lt;from&gt; &lt;to&gt; &lt;file&gt;
 </pre>
@@ -750,9 +752,9 @@ quindi o la firma di un commit oppure una reference
 </div>
 </div>
 
-<div id="outline-container-org77ff08e" class="outline-3">
-<h3 id="org77ff08e"><span class="section-number-3">3.8.</span> Lavorare in parallelo</h3>
-<div class="outline-text-3" id="text-3-8">
+<div id="outline-container-org03f77d9" class="outline-3">
+<h3 id="org03f77d9">Lavorare in parallelo</h3>
+<div class="outline-text-3" id="text-org03f77d9">
 <div class="org-src-container">
 <pre class="src src-sh">git branch
 </pre>
@@ -825,9 +827,9 @@ git commit -m "updated hello.txt"
 </pre>
 </div>
 
-<div id="outline-container-org65cd2fe" class="outline-4">
-<h4 id="org65cd2fe"><span class="section-number-4">3.8.1.</span> Uniamo le modifiche</h4>
-<div class="outline-text-4" id="text-3-8-1">
+<div id="outline-container-orge062a11" class="outline-4">
+<h4 id="orge062a11">Uniamo le modifiche</h4>
+<div class="outline-text-4" id="text-orge062a11">
 <p>
 Innanzitutto spostiamoci sul branch <code>main</code>
 </p>
@@ -885,9 +887,9 @@ modifiche.
 </div>
 </div>
 
-<div id="outline-container-orgb687dcc" class="outline-4">
-<h4 id="orgb687dcc"><span class="section-number-4">3.8.2.</span> Risoluzione dei conflitti</h4>
-<div class="outline-text-4" id="text-3-8-2">
+<div id="outline-container-orga955b9c" class="outline-4">
+<h4 id="orga955b9c">Risoluzione dei conflitti</h4>
+<div class="outline-text-4" id="text-orga955b9c">
 <p>
 E se non va tutto bene? Può essere che io e i miei collaboratori
 abbiamo lavorato sullo stesso file per due modifiche
@@ -928,9 +930,9 @@ Vedremo che ci verrà chiesto un messaggio da allegare al nuovo
 </div>
 </div>
 
-<div id="outline-container-orgb3075eb" class="outline-3">
-<h3 id="orgb3075eb"><span class="section-number-3">3.9.</span> Remotes</h3>
-<div class="outline-text-3" id="text-3-9">
+<div id="outline-container-org3c60166" class="outline-3">
+<h3 id="org3c60166">Remotes</h3>
+<div class="outline-text-3" id="text-org3c60166">
 <p>
 Abbiamo parlato di molte cose, ma manca quella più importante di
 tutte: come collaboro effettivamente con altre persone?
@@ -952,9 +954,9 @@ GitHub è di fatto un servizio cloud per il mantenimento di <code>remote</code>
 </p>
 </div>
 
-<div id="outline-container-org33af985" class="outline-4">
-<h4 id="org33af985"><span class="section-number-4">3.9.1.</span> Che remote abbiamo</h4>
-<div class="outline-text-4" id="text-3-9-1">
+<div id="outline-container-org91df22d" class="outline-4">
+<h4 id="org91df22d">Che remote abbiamo</h4>
+<div class="outline-text-4" id="text-org91df22d">
 <p>
 Stampa una lista dei remote configurati
 </p>
@@ -965,9 +967,9 @@ Stampa una lista dei remote configurati
 </div>
 </div>
 
-<div id="outline-container-orgc0e4601" class="outline-4">
-<h4 id="orgc0e4601"><span class="section-number-4">3.9.2.</span> Aggiungiamo un remote</h4>
-<div class="outline-text-4" id="text-3-9-2">
+<div id="outline-container-orgbbf1fca" class="outline-4">
+<h4 id="orgbbf1fca">Aggiungiamo un remote</h4>
+<div class="outline-text-4" id="text-orgbbf1fca">
 <div class="org-src-container">
 <pre class="src src-sh">git remote add &lt;name&gt; &lt;url&gt;
 </pre>
@@ -978,9 +980,9 @@ Aggiungiamo un remote all'url <code>&lt;url&gt;</code> e lo chiamiamo <code>&lt;
 </div>
 </div>
 
-<div id="outline-container-org6c9029d" class="outline-4">
-<h4 id="org6c9029d"><span class="section-number-4">3.9.3.</span> Aggiungiamo il nostro lavoro al remote</h4>
-<div class="outline-text-4" id="text-3-9-3">
+<div id="outline-container-org486e731" class="outline-4">
+<h4 id="org486e731">Aggiungiamo il nostro lavoro al remote</h4>
+<div class="outline-text-4" id="text-org486e731">
 <div class="org-src-container">
 <pre class="src src-sh">git push &lt;remote&gt; &lt;local branch&gt;:&lt;remote branch&gt;
 </pre>
@@ -992,9 +994,9 @@ branch <code>&lt;remote branch&gt;</code> del remote <code>&lt;remote&gt;</code>
 </div>
 </div>
 
-<div id="outline-container-orgdae168b" class="outline-4">
-<h4 id="orgdae168b"><span class="section-number-4">3.9.4.</span> I nostri amici dall'altra parte</h4>
-<div class="outline-text-4" id="text-3-9-4">
+<div id="outline-container-org8c6e9f7" class="outline-4">
+<h4 id="org8c6e9f7">I nostri amici dall'altra parte</h4>
+<div class="outline-text-4" id="text-org8c6e9f7">
 <p>
 Prendono le modifiche che abbiamo fatto con
 </p>
@@ -1017,9 +1019,9 @@ quello remoto, segnalando eventuali conflitti</dd>
 </div>
 
 
-<div id="outline-container-org46c20c9" class="outline-4">
-<h4 id="org46c20c9"><span class="section-number-4">3.9.5.</span> E se ho modificato qualcosa intanto?</h4>
-<div class="outline-text-4" id="text-3-9-5">
+<div id="outline-container-org5b207d1" class="outline-4">
+<h4 id="org5b207d1">E se ho modificato qualcosa intanto?</h4>
+<div class="outline-text-4" id="text-org5b207d1">
 <p>
 È uno scenario abbastanza comune: lavoro con altre persone su del
 codice, faccio i miei commit, <code>git pull</code> e mi viene fuori merge
@@ -1032,9 +1034,9 @@ sistemato il sistemabile, tocca a te sistemare i file su cui non
 </div>
 </div>
 
-<div id="outline-container-org2be27e4" class="outline-2">
-<h2 id="org2be27e4"><span class="section-number-2">4.</span> Credits / risorse</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgee2a967" class="outline-2">
+<h2 id="orgee2a967">Credits / risorse</h2>
+<div class="outline-text-2" id="text-orgee2a967">
 <p>
 Menzione unica al programma <a href="https://missing.csail.mit.edu/">Missing semester at MIT</a>, contenente
 molte risorse interessanti per approfondire tutta la letteratura
@@ -1047,7 +1049,7 @@ Git</a> (con più riferimenti, esercizi e risorse).
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Luca Zaninotto</p>
-<p class="date">Created: 2022-12-07 Wed 18:49</p>
+<p class="date">Created: 2022-12-10 Sat 10:33</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
