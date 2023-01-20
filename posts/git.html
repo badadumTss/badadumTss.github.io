@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<!-- 2023-01-17 Tue 16:08 -->
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<!-- 2023-01-20 Fri 11:49 -->
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Git</title>
 <meta name="author" content="Luca Zaninotto" />
@@ -218,11 +216,11 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div id="navbar">
+<nav>
 <a id="navbar-home" href="../index.html">🏡  Home</a>
 <div class="separator"></div>
 <a id="navbar-inputs" href="pages/inputs.html">🧠  My inputs</a>
-</div>
+</nav>
 </div>
 <div id="content" class="content">
 <h1 class="title">Git</h1>
@@ -509,7 +507,7 @@ Muoviamoci in una cartella vuota, da qui faremo tutto
 
 <div class="org-src-container">
 <pre class="src src-sh">mkdir ~/git_demo;
-<span style="color: #cf2f4f; font-weight: bold;">cd</span> ~/git_demo
+<span style="color: #1f6fbf; font-weight: bold;">cd</span> ~/git_demo
 </pre>
 </div>
 </div>
@@ -585,7 +583,7 @@ Vogliamo ora aggiungere dei file alla nostra cartella e fare un
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #cf2f4f; font-weight: bold;">echo</span> <span style="color: #5a7400;">"hello world!"</span> &gt; hello.txt
+<pre class="src src-sh"><span style="color: #1f6fbf; font-weight: bold;">echo</span> <span style="color: #4244ef;">"hello world!"</span> &gt; hello.txt
 </pre>
 </div>
 
@@ -635,7 +633,7 @@ fare un commit e registrare lo state corrente della storia facciamo
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">git commit -m <span style="color: #5a7400;">"added hello.txt"</span>
+<pre class="src src-sh">git commit -m <span style="color: #4244ef;">"added hello.txt"</span>
 </pre>
 </div>
 
@@ -796,7 +794,7 @@ non lo stiamo ancora <i>guardando</i>. possiamo farlo con
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">git checkout feature    <span style="color: #61756c; font-style: italic;"># </span><span style="color: #61756c; font-style: italic;">-b for ~branch~</span>
+<pre class="src src-sh">git checkout feature    <span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">-b for ~branch~</span>
 </pre>
 </div>
 
@@ -819,10 +817,10 @@ che ora il nostro grafo ha un biforcazione.
 
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #cf2f4f; font-weight: bold;">echo</span> <span style="color: #5a7400;">"another line"</span> &gt;&gt; hello.txt
+<pre class="src src-sh"><span style="color: #1f6fbf; font-weight: bold;">echo</span> <span style="color: #4244ef;">"another line"</span> &gt;&gt; hello.txt
 
 git add hello.txt
-git commit -m <span style="color: #5a7400;">"updated hello.txt"</span>
+git commit -m <span style="color: #4244ef;">"updated hello.txt"</span>
 </pre>
 </div>
 
@@ -1006,7 +1004,7 @@ branch <code>&lt;remote branch&gt;</code> del remote <code>&lt;remote&gt;</code>
 Prendono le modifiche che abbiamo fatto con
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">git pull                        <span style="color: #61756c; font-style: italic;"># </span><span style="color: #61756c; font-style: italic;">macro per git fetch; git merge</span>
+<pre class="src src-sh">git pull                        <span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">macro per git fetch; git merge</span>
 </pre>
 </div>
 <p>
@@ -1054,7 +1052,7 @@ Git</a> (con più riferimenti, esercizi e risorse).
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Luca Zaninotto</p>
-<p class="date">Created: 2023-01-17 Tue 16:08</p>
+<p class="date">Created: 2023-01-20 Fri 11:49</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
