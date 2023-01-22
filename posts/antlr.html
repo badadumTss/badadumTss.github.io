@@ -4,7 +4,7 @@
 <!-- 2023-01-22 Sun 17:22 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Su se stessi</title>
+<title>Use antlr and go for a compiler</title>
 <meta name="author" content="Luca Zaninotto" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
@@ -192,6 +192,27 @@
   .org-svg { }
 </style>
 <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -202,20 +223,56 @@
 </nav>
 </div>
 <div id="content" class="content">
-<h1 class="title">Su se stessi</h1>
+<h1 class="title">Use antlr and go for a compiler</h1>
 <p>
-Scrivo per la prima volta una riflessione al tramonto dei miei 23
-anni, il primo di gennaio del 2023 (Le coincidenze numeriche fanno
-sempre ridere). Quello che sto attraversando forse è un momento molto
-particolare, o forse tra un anno me ne sarò già dimenticato, ma ci
-tengo comunque a scrivere qualcosa. Non scriverò di come mi sono
-formato o di come sono arrivato a questo punto, renderebbe il tutto
-troppo noioso, e credo che già così nessuno avrà la pazienza di
-leggermi.
+As a university project I had to build a compiler from CCS with value
+passing to CCS with pure syncronization. The language per-se is a
+theoretical language to describe the behaviour of asyncoronous
+actors. The language was first proposed by Milner in 1980 (<a href="https://doi.org/10.1007/3-540-10235-3_11">can be
+fonud here</a>) and in its pure form does not allow for these actors to
+pass values trough the channels they set up. However this behaviour is
+encodeable, and is exactly what the compiler I'm building is trying to
+do.
+</p>
+
+<div id="outline-container-org5abcacb" class="outline-2">
+<h2 id="org5abcacb">Background</h2>
+<div class="outline-text-2" id="text-org5abcacb">
+</div>
+<div id="outline-container-org6233b65" class="outline-3">
+<h3 id="org6233b65">Compiler pipeline</h3>
+<div class="outline-text-3" id="text-org6233b65">
+<p>
+The compiler pipeline is pretty straight forward:
+</p>
+<div class="org-center">
+<p>
+text (input language) \(\rightarrow\) tokens \(\rightarrow\) abstract syntax tree \(\rightarrow\) text (output language)
 </p>
 </div>
+<p>
+the first part of this pipeline is handled by the lexer, the second
+part by the parser and finally the ``real'' compiler comes in and
+takes care of the last part. <code>Antlr</code> in this context fits into the
+first and second part, generating from a grammar the source code
+for a lexer (trough regular expressions) and a parser. What is lef
+to do for us is actually implement the logic behind the compilation
+task.
+</p>
+</div>
+</div>
+<div id="outline-container-orge13982f" class="outline-3">
+<h3 id="orge13982f">Antlr</h3>
+</div>
+<div id="outline-container-orga36d62c" class="outline-3">
+<h3 id="orga36d62c">REPL</h3>
+</div>
+</div>
+<div id="outline-container-org00f7c11" class="outline-2">
+<h2 id="org00f7c11">Implementation</h2>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="date">Date: 27 dec 2022</p>
 <p class="author">Author: Luca Zaninotto</p>
 <p class="date">Created: 2023-01-22 Sun 17:22</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
