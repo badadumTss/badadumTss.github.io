@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2023-02-08 Wed 10:40 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clustering of a local manifold</title>
+<meta name="author" content="Luca Zaninotto" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav><a id="navbar-home" href="../index.html">🏡  Home</a></nav>
+</div>
+<div id="content" class="content">
+<h1 class="title">Clustering of a local manifold</h1>
+<div id="outline-container-org43bf274" class="outline-2">
+<h2 id="org43bf274">Intro</h2>
+<div class="outline-text-2" id="text-org43bf274">
+<p>
+This is the product of a machine learning course at my
+university. The task was to explore the Machine Learning research
+space and find something interesting to analyze. I found <a href="https://arxiv.org/abs/1908.05968">N2D: (Not
+Too) Deep Clustering via Clustering the Local Manifold of an
+Autoencoded Embedding</a>, a new approach in clustering: essentially
+preprocess the data trough an autoencoder to cluster inputs more
+easily. I made an original implementation with <a href="https://pytorch.org/">pytorch</a> and I ran it
+against the <a href="https://it.wikipedia.org/wiki/MNIST_database">MNIST dataset</a>, obtaining comparable results to the ones
+obtained by the original authors. Here's the static version of the
+notebook you can find <a href="https://colab.research.google.com/drive/11j16mhZbaPT_2RA7rb6F1c5JRcn2RMYe?usp=share_link">here</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org67ad758" class="outline-2">
+<h2 id="org67ad758">Imports</h2>
+<div class="outline-text-2" id="text-org67ad758">
+<p>
+In this section we'll import all the necessary libraries, such as
+</p>
+<ul class="org-ul">
+<li>numpy for matrix manipulation and arithmetic</li>
+<li>pytorch, the main library for machine learning we'll use</li>
+<li>matplotlib to plot our results</li>
+</ul>
+</div>
+
+<div id="outline-container-org02669bf" class="outline-3">
+<h3 id="org02669bf">The libraries</h3>
+<div class="outline-text-3" id="text-org02669bf">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">Matplotlib and numpy</span>
+<span style="color: #004fc0; font-weight: bold;">import</span> matplotlib.pyplot <span style="color: #004fc0; font-weight: bold;">as</span> plt
+<span style="color: #004fc0; font-weight: bold;">import</span> numpy <span style="color: #004fc0; font-weight: bold;">as</span> np
+
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">torch, datasets and its utilities</span>
+<span style="color: #004fc0; font-weight: bold;">import</span> torch
+<span style="color: #004fc0; font-weight: bold;">import</span> torch.nn <span style="color: #004fc0; font-weight: bold;">as</span> nn
+<span style="color: #004fc0; font-weight: bold;">import</span> torch.optim <span style="color: #004fc0; font-weight: bold;">as</span> optim
+<span style="color: #004fc0; font-weight: bold;">import</span> torchvision
+<span style="color: #004fc0; font-weight: bold;">import</span> random
+
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">switch to gpu if available</span>
+<span style="color: #3a6dd2;">device</span> = torch.device(<span style="color: #4244ef;">"cuda"</span> <span style="color: #004fc0; font-weight: bold;">if</span> torch.cuda.is_available() <span style="color: #004fc0; font-weight: bold;">else</span> <span style="color: #4244ef;">"cpu"</span>)
+<span style="color: #1f6fbf; font-weight: bold;">print</span>(<span style="color: #4244ef;">'Using device: '</span>, device)
+
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">setting random seeds for reproducibility</span>
+torch.manual_seed(0)
+np.random.seed(0)
+random.seed(0)
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf85980f" class="outline-3">
+<h3 id="orgf85980f">The dataset</h3>
+<div class="outline-text-3" id="text-orgf85980f">
+<p>
+In the following section we'll import our train and
+test datasets, in order to do so we need the loaders for both the test
+and train data
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">from</span> torchvision <span style="color: #004fc0; font-weight: bold;">import</span> datasets <span style="color: #004fc0; font-weight: bold;">as</span> dts
+<span style="color: #004fc0; font-weight: bold;">from</span> torchvision.transforms <span style="color: #004fc0; font-weight: bold;">import</span> ToTensor 
+
+<span style="color: #3a6dd2;">train_data</span> = dts.MNIST(
+    root = <span style="color: #4244ef;">'data'</span>,
+    train = <span style="color: #065fff;">True</span>,                         
+    transform = ToTensor(), 
+    download = <span style="color: #065fff;">True</span>,            
+)
+
+test_data = dts.MNIST(
+    root = <span style="color: #4244ef;">'data'</span>, 
+    train = <span style="color: #065fff;">False</span>, 
+    transform = ToTensor()
+)
+
+train_loader = torch.utils.data.DataLoader(
+    train_data, 
+    batch_size=128, 
+    shuffle=<span style="color: #065fff;">True</span>,
+)
+
+test_loader = torch.utils.data.DataLoader(
+    test_data, 
+    batch_size=20, 
+    shuffle=<span style="color: #065fff;">True</span>
+)
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org409da10" class="outline-2">
+<h2 id="org409da10">The autoencoder</h2>
+<div class="outline-text-2" id="text-org409da10">
+<p>
+As described in the paper, the first component of our model is the
+autoencoder, takes as input the image as an array of dimensionality
+(1, 784) and ideally should output the same image. The rationale
+behind the structuring of this component in such a way (2 bottleneck
+layers of 500 units, an intermediate hidden layer of 2000 units and
+then the dual decoder) is described in the report of the project.
+</p>
+</div>
+
+<div id="outline-container-orgb6969a6" class="outline-3">
+<h3 id="orgb6969a6">The encoder</h3>
+<div class="outline-text-3" id="text-orgb6969a6">
+<p>
+The encoder component of the autoencoder is responsible to encode
+the input data into vectors of different dimensionality, the
+bottleneck (2 units of lower dimensionality as the input) force the
+encoder to actually select the features it considers most important
+from the raw data, the output is 2000 unit.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">class</span> <span style="color: #7f5ae0;">Encoder</span>(nn.Module):
+    <span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">__init__</span>(<span style="color: #004fc0; font-weight: bold;">self</span>, shape):
+        <span style="color: #1f6fbf; font-weight: bold;">super</span>().__init__()
+        <span style="color: #004fc0; font-weight: bold;">self</span>.<span style="color: #3a6dd2;">encoder_hidden_layer_1</span> = nn.Linear(
+            in_features=shape, out_features=500
+        )
+        <span style="color: #004fc0; font-weight: bold;">self</span>.encoder_hidden_layer_2 = nn.Linear(
+            in_features=500, out_features=500
+        )
+        <span style="color: #004fc0; font-weight: bold;">self</span>.encoder_output_layer = nn.Linear(
+            in_features=500, out_features=2000
+        )
+
+    <span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">forward</span>(<span style="color: #004fc0; font-weight: bold;">self</span>, features):
+        activation = <span style="color: #004fc0; font-weight: bold;">self</span>.encoder_hidden_layer_1(features)
+        activation = torch.relu(activation)
+        activation = <span style="color: #004fc0; font-weight: bold;">self</span>.encoder_hidden_layer_2(activation)
+        activation = torch.relu(activation)
+        code = <span style="color: #004fc0; font-weight: bold;">self</span>.encoder_output_layer(activation)
+        code = torch.sigmoid(code)
+        <span style="color: #004fc0; font-weight: bold;">return</span> code
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3215ba7" class="outline-3">
+<h3 id="org3215ba7">The decoder</h3>
+<div class="outline-text-3" id="text-org3215ba7">
+<p>
+Can be considered as the other side of the collaborative network
+encoder-decoder, and has the job of better turn the encoding given
+by the encoder into the initial data. Is very important in order to
+train the encoder to find the best possible features to rapresent
+in order to get the best possible encoding.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">class</span> <span style="color: #7f5ae0;">Decoder</span>(nn.Module):
+    <span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">__init__</span>(<span style="color: #004fc0; font-weight: bold;">self</span>, shape):
+        <span style="color: #1f6fbf; font-weight: bold;">super</span>().__init__()
+        <span style="color: #004fc0; font-weight: bold;">self</span>.<span style="color: #3a6dd2;">decoder_hidden_layer_1</span> = nn.Linear(
+            in_features=2000, out_features=500
+        )
+        <span style="color: #004fc0; font-weight: bold;">self</span>.decoder_hidden_layer_2 = nn.Linear(
+            in_features=500, out_features=500
+        )
+        <span style="color: #004fc0; font-weight: bold;">self</span>.decoder_output_layer = nn.Linear(
+            in_features=500, out_features=shape
+        )
+
+    <span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">forward</span>(<span style="color: #004fc0; font-weight: bold;">self</span>, code):
+        activation = <span style="color: #004fc0; font-weight: bold;">self</span>.decoder_hidden_layer_1(code)
+        activation = torch.relu(activation)
+        activation = <span style="color: #004fc0; font-weight: bold;">self</span>.decoder_hidden_layer_2(activation)
+        activation = torch.relu(activation)
+        activation = <span style="color: #004fc0; font-weight: bold;">self</span>.decoder_output_layer(activation)
+        reconstructed = torch.sigmoid(activation)
+        <span style="color: #004fc0; font-weight: bold;">return</span> reconstructed
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc8964a9" class="outline-3">
+<h3 id="orgc8964a9">The autoencoder</h3>
+<div class="outline-text-3" id="text-orgc8964a9">
+<p>
+The resulting network is the combination of the two
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">class</span> <span style="color: #7f5ae0;">AE</span>(nn.Module):
+    <span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">__init__</span>(<span style="color: #004fc0; font-weight: bold;">self</span>, shape):
+        <span style="color: #1f6fbf; font-weight: bold;">super</span>().__init__()
+        <span style="color: #004fc0; font-weight: bold;">self</span>.<span style="color: #3a6dd2;">encoder</span> = Encoder(shape)
+        <span style="color: #004fc0; font-weight: bold;">self</span>.<span style="color: #3a6dd2;">decoder</span> = Decoder(shape)
+
+    <span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">forward</span>(<span style="color: #004fc0; font-weight: bold;">self</span>, features):
+        <span style="color: #3a6dd2;">code</span> = <span style="color: #004fc0; font-weight: bold;">self</span>.encoder.forward(features)
+        <span style="color: #3a6dd2;">reconstructed</span> = <span style="color: #004fc0; font-weight: bold;">self</span>.decoder.forward(code)
+        <span style="color: #004fc0; font-weight: bold;">return</span> reconstructed
+</pre>
+</div>
+<p>
+We can now instanciate our model
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">create a model from ~AE~ autoencoder class</span>
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">load it to the specified device, either gpu or cpu</span>
+<span style="color: #3a6dd2;">model</span> = AE(784).to(device)
+
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">create an optimizer object</span>
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">Adam optimizer with learning rate 1e-3</span>
+<span style="color: #3a6dd2;">optimizer</span> = optim.Adam(model.parameters(), lr=1e-3)
+
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">mean-squared error loss</span>
+criterion = nn.MSELoss()
+</pre>
+</div>
+<p>
+and train it
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #3a6dd2;">epochs</span> = 20
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">Set this to False to load the weights of the last successful run</span>
+<span style="color: #3a6dd2;">train</span> = <span style="color: #065fff;">True</span>
+<span style="color: #3a6dd2;">path</span> = <span style="color: #4244ef;">"weights.pt"</span>
+
+<span style="color: #004fc0; font-weight: bold;">if</span> <span style="color: #3a6dd2;">train</span>:
+  <span style="color: #004fc0; font-weight: bold;">for</span> epoch <span style="color: #004fc0; font-weight: bold;">in</span> <span style="color: #1f6fbf; font-weight: bold;">range</span>(epochs):
+    loss = 0
+      <span style="color: #004fc0; font-weight: bold;">for</span> x, _ <span style="color: #004fc0; font-weight: bold;">in</span> <span style="color: #3a6dd2;">train_loader</span>:
+        x = x.view(-1, 784).to(device)
+        optimizer.zero_grad()
+        <span style="color: #3a6dd2;">outputs</span> = model(x)
+        <span style="color: #3a6dd2;">train_loss</span> = criterion(outputs, x)
+        train_loss.backward()
+        optimizer.step()
+        <span style="color: #3a6dd2;">loss</span> += train_loss.item()
+
+      <span style="color: #3a6dd2;">loss</span> = loss / <span style="color: #1f6fbf; font-weight: bold;">len</span>(train_loader)
+      <span style="color: #1f6fbf; font-weight: bold;">print</span>(<span style="color: #4244ef;">"epoch : {}/{}, loss = {:.6f}"</span>.<span style="color: #1f6fbf; font-weight: bold;">format</span>(epoch + 1, epochs, loss))
+      torch.save(model.state_dict(), path)
+<span style="color: #004fc0; font-weight: bold;">else</span>:
+  model.load_state_dict(torch.load(path))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfac998a" class="outline-3">
+<h3 id="orgfac998a">Test the autoencoder</h3>
+<div class="outline-text-3" id="text-orgfac998a">
+<p>
+The autoencoder can now be tested in order to get a rough
+understanding of weather it is good enough on reconstructing images
+or not.  On top there are the initial images, and below the
+reconstructed ones. As we can see the accuracy became pretty high.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #3a6dd2;">test_examples</span> = <span style="color: #065fff;">None</span>
+model.<span style="color: #1f6fbf; font-weight: bold;">eval</span>()
+
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">Test it over the first data of the test dataset</span>
+<span style="color: #004fc0; font-weight: bold;">with</span> torch.no_grad():
+    <span style="color: #004fc0; font-weight: bold;">for</span> batch_features <span style="color: #004fc0; font-weight: bold;">in</span> <span style="color: #3a6dd2;">test_loader</span>:
+        batch_features = batch_features[0].to(device)
+        <span style="color: #3a6dd2;">test_examples</span> = batch_features.view(-1, 784)
+        <span style="color: #3a6dd2;">reconstruction</span> = model(test_examples)
+        <span style="color: #004fc0; font-weight: bold;">break</span>
+
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">Plot results</span>
+<span style="color: #004fc0; font-weight: bold;">with</span> torch.no_grad():
+    <span style="color: #3a6dd2;">number</span> = 10
+    plt.figure(figsize=(20, 4))
+    <span style="color: #004fc0; font-weight: bold;">for</span> index <span style="color: #004fc0; font-weight: bold;">in</span> <span style="color: #1f6fbf; font-weight: bold;">range</span>(number):
+        <span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">display original</span>
+        ax = plt.subplot(2, number, index + 1)
+        plt.imshow(test_examples[index].cpu().numpy().reshape(28, 28))
+        plt.gray()
+        ax.get_xaxis().set_visible(<span style="color: #065fff;">False</span>)
+        ax.get_yaxis().set_visible(<span style="color: #065fff;">False</span>)
+
+        <span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">display reconstruction</span>
+        ax = plt.subplot(2, number, index + 1 + number)
+        plt.imshow(reconstruction[index].cpu().numpy().reshape(28, 28))
+        plt.gray()
+        ax.get_xaxis().set_visible(<span style="color: #065fff;">False</span>)
+        ax.get_yaxis().set_visible(<span style="color: #065fff;">False</span>)
+        plt.show()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org524ea18" class="outline-3">
+<h3 id="org524ea18">Passing to the manifold learners</h3>
+<div class="outline-text-3" id="text-org524ea18">
+<p>
+What we're really interested on is the output of the encoder
+layer. So let's split the autoencoder component and provider its
+output as input for the next component: the manifold learner.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #3a6dd2;">encoder</span> = model.encoder
+encoder.<span style="color: #1f6fbf; font-weight: bold;">eval</span>()
+
+<span style="color: #004fc0; font-weight: bold;">with</span> torch.no_grad():
+    <span style="color: #004fc0; font-weight: bold;">for</span> batch_features <span style="color: #004fc0; font-weight: bold;">in</span> <span style="color: #3a6dd2;">test_loader</span>:
+        batch_features = batch_features[0].to(device)
+        <span style="color: #3a6dd2;">test_examples</span> = batch_features.view(-1, 784)
+        <span style="color: #3a6dd2;">hl</span> = encoder(test_examples)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd504263" class="outline-2">
+<h2 id="orgd504263">Manifold learners</h2>
+<div class="outline-text-2" id="text-orgd504263">
+<p>
+A number of manifold learner are available trough different
+libraries: We'll use
+</p>
+
+<ul class="org-ul">
+<li>scikit learn for Isomap (global manifold focus)</li>
+<li>umap for umap (local manifold focus, good at global manifold)</li>
+<li>scikit learn for t-SNE (local manifold focus)</li>
+</ul>
+
+
+<p>
+To install umap we can do
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">pip install umap umap-learn
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-org6a208a5" class="outline-3">
+<h3 id="org6a208a5">UMAP: Uniform Manifold Approximation and Projection</h3>
+<div class="outline-text-3" id="text-org6a208a5">
+<p>
+As already stated this algorithm finds a low dimensional embedding
+of the data that approximates an underlying manifold, has a focus
+on the local manifold while still providing a good rapresentation
+of the global structure.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">import</span> umap
+
+<span style="color: #3a6dd2;">umap_manifold</span> = umap.UMAP(
+    random_state=0,
+    metric=<span style="color: #4244ef;">'euclidean'</span>,
+    n_components=10,
+    n_neighbors=20,
+    min_dist=0.0)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9a602fb" class="outline-3">
+<h3 id="org9a602fb">t-SNE: t-distributed Stochastic Neighbor Embedding</h3>
+<div class="outline-text-3" id="text-org9a602fb">
+<p>
+Is a non-linear method with the objective of optimize for local
+distances when creating the embedding. To do so we'll try to use
+the Multicore TSNE library as it complies to the sklearn api and is
+generally faster, will fall back to sklearn if the installation
+results in some problems.
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">pip install git+https://github.com/jorvis/Multicore-TSNE || pip install sklearn
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">try</span>:
+  <span style="color: #004fc0; font-weight: bold;">from</span> MulticoreTSNE <span style="color: #004fc0; font-weight: bold;">import</span> MulticoreTSNE <span style="color: #004fc0; font-weight: bold;">as</span> TSNE
+<span style="color: #004fc0; font-weight: bold;">except</span>:
+  <span style="color: #004fc0; font-weight: bold;">from</span> sklearn.manifold <span style="color: #004fc0; font-weight: bold;">import</span> TSNE
+
+tsne_manifold = TSNE(
+  n_components=2,
+  n_jobs=16,
+  random_state=0)
+
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">The fit outputs some warnings as current (9 Jan 2023), but I choose</span>
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">to ignore them since they are notices about future changes in the</span>
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">API (default parameters)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org9772194" class="outline-3">
+<h3 id="org9772194">Isomap</h3>
+<div class="outline-text-3" id="text-org9772194">
+<p>
+Isomap is another non-linear method with the objective to optimze
+for global manifold rather than local. Is included in the
+experiment in order to validate the idea that the embedding of a
+local manifold is better suited for this task (set to 10 components
+instead than the 2 components we set the other 2, this is because
+isomap with fewer components was observed to perform even worse
+than shallow clustering alone). At this point we have to install
+sklearn if we didn't alredy
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">pip install sklearn
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">from</span> sklearn.manifold <span style="color: #004fc0; font-weight: bold;">import</span> Isomap
+
+<span style="color: #3a6dd2;">isomap_manifold</span> = Isomap(
+    n_components=10,
+    n_neighbors=5)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4f3d451" class="outline-2">
+<h2 id="org4f3d451">Clustering</h2>
+<div class="outline-text-2" id="text-org4f3d451">
+<p>
+Final passage of our process is the clustering of the embedded data,
+to do so we'll try different methods: the Gaussian Mixture Models
+(GMM). It is a shallow method for clustering, tuned in order to
+build 10 clusters (number of digits in the dataset) and set to a
+random state of 0 for reproducibility.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">from</span> sklearn.mixture <span style="color: #004fc0; font-weight: bold;">import</span> GaussianMixture
+<span style="color: #004fc0; font-weight: bold;">from</span> sklearn.cluster <span style="color: #004fc0; font-weight: bold;">import</span> KMeans
+
+<span style="color: #3a6dd2;">gmm</span> = GaussianMixture(
+    covariance_type=<span style="color: #4244ef;">'full'</span>,
+    n_components=10,
+    random_state=0)
+
+km = KMeans(
+    init=<span style="color: #4244ef;">'k-means++'</span>,
+    n_clusters=10,
+    random_state=0,
+    n_init=20)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgf559509" class="outline-3">
+<h3 id="orgf559509">Metrics</h3>
+<div class="outline-text-3" id="text-orgf559509">
+<p>
+In order to evaluate the resulting clustering we'll rely on the
+notion of accuracy, Normalized mutual information (NMI) and
+Adjusted Random Index (ARI). While ARI and NMI are easily
+calculated trough the metrics module of the scikit library, for the
+accuracy we have to define the measure ourselves.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">from</span> scipy.optimize <span style="color: #004fc0; font-weight: bold;">import</span> linear_sum_assignment
+
+<span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">linear_assignment</span>(cost_matrix):
+    <span style="color: #3a6dd2;">x</span>, <span style="color: #3a6dd2;">y</span> = linear_sum_assignment(cost_matrix)
+    <span style="color: #004fc0; font-weight: bold;">return</span> np.array(<span style="color: #1f6fbf; font-weight: bold;">list</span>(<span style="color: #1f6fbf; font-weight: bold;">zip</span>(x, y)))
+
+<span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">best_cluster_fit</span>(y_true, y_pred):
+    <span style="color: #3a6dd2;">y_true</span> = y_true.astype(np.int64)
+    <span style="color: #3a6dd2;">D</span> = <span style="color: #1f6fbf; font-weight: bold;">max</span>(y_pred.<span style="color: #1f6fbf; font-weight: bold;">max</span>(), y_true.<span style="color: #1f6fbf; font-weight: bold;">max</span>()) + 1
+    <span style="color: #3a6dd2;">w</span> = np.zeros((D, D), dtype=np.int64)
+    <span style="color: #004fc0; font-weight: bold;">for</span> i <span style="color: #004fc0; font-weight: bold;">in</span> <span style="color: #1f6fbf; font-weight: bold;">range</span>(y_pred.size):
+        <span style="color: #3a6dd2;">w</span>[<span style="color: #3a6dd2;">y_pred</span>[i], <span style="color: #3a6dd2;">y_true</span>[i]] += 1
+
+    ind = linear_assignment(w.<span style="color: #1f6fbf; font-weight: bold;">max</span>() - w)
+    best_fit = []
+    <span style="color: #004fc0; font-weight: bold;">for</span> i <span style="color: #004fc0; font-weight: bold;">in</span> <span style="color: #1f6fbf; font-weight: bold;">range</span>(y_pred.size):
+        <span style="color: #004fc0; font-weight: bold;">for</span> j <span style="color: #004fc0; font-weight: bold;">in</span> <span style="color: #1f6fbf; font-weight: bold;">range</span>(<span style="color: #1f6fbf; font-weight: bold;">len</span>(ind)):
+            <span style="color: #004fc0; font-weight: bold;">if</span> ind[j][0] == y_pred[i]:
+                best_fit.append(ind[j][1])
+    <span style="color: #004fc0; font-weight: bold;">return</span> best_fit, ind, w
+
+
+<span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">cluster_acc</span>(y_true, y_pred):
+    <span style="color: #3a6dd2;">_</span>, <span style="color: #3a6dd2;">ind</span>, <span style="color: #3a6dd2;">w</span> = best_cluster_fit(y_true, y_pred)
+    <span style="color: #004fc0; font-weight: bold;">return</span> <span style="color: #1f6fbf; font-weight: bold;">sum</span>([w[i, j] <span style="color: #004fc0; font-weight: bold;">for</span> i, j <span style="color: #004fc0; font-weight: bold;">in</span> ind]) * 1.0 / y_pred.size
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5f5f4c7" class="outline-3">
+<h3 id="org5f5f4c7">Visualization</h3>
+<div class="outline-text-3" id="text-org5f5f4c7">
+<p>
+In order to visualize the underlying manifold and the cluster
+information we'll rely on an utility function an we'll plot our
+results for each run (shallow clusters and clustering of embedded
+manifolds)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">import</span> seaborn <span style="color: #004fc0; font-weight: bold;">as</span> sns
+<span style="color: #004fc0; font-weight: bold;">import</span> pandas <span style="color: #004fc0; font-weight: bold;">as</span> pd
+
+<span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">plot</span>(x, y, plot_id, names=<span style="color: #065fff;">None</span>):
+    viz_df = pd.DataFrame(data=x[:5000])
+    viz_df[<span style="color: #4244ef;">'Label'</span>] = y[:5000]
+    <span style="color: #004fc0; font-weight: bold;">if</span> names <span style="color: #004fc0; font-weight: bold;">is</span> <span style="color: #004fc0; font-weight: bold;">not</span> <span style="color: #065fff;">None</span>:
+        viz_df[<span style="color: #4244ef;">'Label'</span>] = viz_df[<span style="color: #4244ef;">'Label'</span>].<span style="color: #1f6fbf; font-weight: bold;">map</span>(names)
+
+    plt.subplots(figsize=(8, 5))
+    plt.title(plot_id)
+    sns.scatterplot(x=0, y=1, 
+                    hue=<span style="color: #4244ef;">'Label'</span>, legend=<span style="color: #4244ef;">'full'</span>, 
+                    hue_order=<span style="color: #1f6fbf; font-weight: bold;">sorted</span>(viz_df[<span style="color: #4244ef;">'Label'</span>].unique()),
+                    palette=sns.color_palette(<span style="color: #4244ef;">"hls"</span>, n_colors=10),
+                    alpha=.5,
+                    data=viz_df)
+
+    plt.ylabel(<span style="color: #4244ef;">""</span>)
+    plt.xlabel(<span style="color: #4244ef;">""</span>)
+    plt.tight_layout()
+    plt.show()
+    plt.clf()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd486a1a" class="outline-3">
+<h3 id="orgd486a1a">Measures</h3>
+<div class="outline-text-3" id="text-orgd486a1a">
+<p>
+We'll now proceed to mesure the accuracy and nmi of our model and
+compare it againsta a basic clustering algorithm. To do so we will:
+</p>
+<ul class="org-ul">
+<li>run two basic clusterings (gmm and kmeans) in high dimensions</li>
+<li>run each manifold technique and for every one of them cluster in
+high dimensions</li>
+<li>visualize the embedded data in high dimension</li>
+</ul>
+
+<p>
+First let's reshape our test loader to get all the data at once,
+and initialize a list to contain our results
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">from</span> sklearn <span style="color: #004fc0; font-weight: bold;">import</span> metrics
+
+<span style="color: #804f4f; font-style: italic;"># </span><span style="color: #804f4f; font-style: italic;">loading all the tests at once</span>
+<span style="color: #3a6dd2;">test_loader</span> = torch.utils.data.DataLoader(
+    test_data, 
+    batch_size=10000, 
+    shuffle=<span style="color: #065fff;">False</span>
+)
+
+res = []
+</pre>
+</div>
+
+<p>
+We can now try shallow clustering, and see how it performs
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">with</span> torch.no_grad():
+    <span style="color: #004fc0; font-weight: bold;">for</span> x, y <span style="color: #004fc0; font-weight: bold;">in</span> <span style="color: #3a6dd2;">test_loader</span>:
+        x = x.view(-1, 784).cpu()
+        <span style="color: #3a6dd2;">y</span> = np.asarray(y.numpy())
+
+      gmm.fit(x)
+      <span style="color: #3a6dd2;">y_pred_prob</span> = gmm.predict_proba(x)
+      <span style="color: #3a6dd2;">y_pred</span> = y_pred_prob.argmax(1)
+
+      <span style="color: #3a6dd2;">y_pred</span> = np.asarray(y_pred)
+
+      <span style="color: #3a6dd2;">acc</span> = np.<span style="color: #1f6fbf; font-weight: bold;">round</span>(cluster_acc(y, y_pred), 5)
+      <span style="color: #3a6dd2;">nmi</span> = np.<span style="color: #1f6fbf; font-weight: bold;">round</span>(metrics.normalized_mutual_info_score(y, y_pred), 5)
+      <span style="color: #3a6dd2;">ari</span> = np.<span style="color: #1f6fbf; font-weight: bold;">round</span>(metrics.adjusted_rand_score(y, y_pred), 5)
+
+      <span style="color: #3a6dd2;">res</span> += [(<span style="color: #4244ef;">'GMM'</span>, acc, nmi, ari)]
+
+      <span style="color: #3a6dd2;">y_pred</span> = np.asarray(km.fit_predict(x))
+
+      <span style="color: #3a6dd2;">acc</span> = np.<span style="color: #1f6fbf; font-weight: bold;">round</span>(cluster_acc(y, y_pred), 5)
+      <span style="color: #3a6dd2;">nmi</span> = np.<span style="color: #1f6fbf; font-weight: bold;">round</span>(metrics.normalized_mutual_info_score(y, y_pred), 5)
+      <span style="color: #3a6dd2;">ari</span> = np.<span style="color: #1f6fbf; font-weight: bold;">round</span>(metrics.adjusted_rand_score(y, y_pred), 5)
+
+      <span style="color: #3a6dd2;">res</span> += [(<span style="color: #4244ef;">'Km'</span>, acc, nmi, ari)]
+</pre>
+</div>
+
+<p>
+We'll define an utility function to print a pretty table with our
+results
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">print_res</span>(res):
+  <span style="color: #1f6fbf; font-weight: bold;">format</span> = <span style="color: #4244ef;">"{:&lt;8} {:&lt;15} {:&lt;10} {:&lt;10}"</span>
+  <span style="color: #1f6fbf; font-weight: bold;">print</span>(<span style="color: #1f6fbf; font-weight: bold;">format</span>.<span style="color: #1f6fbf; font-weight: bold;">format</span>(<span style="color: #4244ef;">"name"</span>, <span style="color: #4244ef;">"ACC"</span>, <span style="color: #4244ef;">"NMI"</span>, <span style="color: #4244ef;">"ARI"</span>))
+  <span style="color: #004fc0; font-weight: bold;">for</span> name, acc, nmi, ari <span style="color: #004fc0; font-weight: bold;">in</span> res:
+    <span style="color: #1f6fbf; font-weight: bold;">print</span>(<span style="color: #1f6fbf; font-weight: bold;">format</span>.<span style="color: #1f6fbf; font-weight: bold;">format</span>(name, acc, nmi, ari))
+
+print_res(res)
+</pre>
+</div>
+<p>
+As we can see the shallow algorithms have a pretty bad result, they're not really able to cluster the images in a significative way.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb03efa0" class="outline-3">
+<h3 id="orgb03efa0">Manifolds</h3>
+<div class="outline-text-3" id="text-orgb03efa0">
+<p>
+In order to consistently run our mesures we'll first define an
+helper function that
+</p>
+<ul class="org-ul">
+<li>takes the test data: x for the images (viewed as a
+784-dimensional vector) and y for the label (digit from 0 to 9)</li>
+<li>encodes it trough our autoencoder, resulting in a vector of
+dimensionality 2000 (passing trough a bottleneck of
+dimension 500)</li>
+<li>passes the encoding trough a manifold learner (different each
+time)</li>
+<li>plots the embedded data, coloring it according to the cluster</li>
+<li>returns the accuracy and nmi mesures along with the name (this is
+done because we might want to run the evaluation of the model on
+different batch of data, the returned value is a vector of tuples
+rapresenting for each batch the accuracy and nmi)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #004fc0; font-weight: bold;">def</span> <span style="color: #00845f;">cluster_embedded</span>(manifold, name):
+  <span style="color: #3a6dd2;">res</span> = []
+  <span style="color: #004fc0; font-weight: bold;">with</span> torch.no_grad():
+    <span style="color: #004fc0; font-weight: bold;">for</span> x, y <span style="color: #004fc0; font-weight: bold;">in</span> <span style="color: #3a6dd2;">test_loader</span>:
+        x = x.view(-1, 784).to(device)
+        <span style="color: #3a6dd2;">y</span> = np.asarray(y.numpy())
+
+        <span style="color: #3a6dd2;">hl</span> = encoder(x)
+
+        <span style="color: #3a6dd2;">hle</span> = manifold.fit_transform(hl.cpu())
+        gmm.fit(hle)
+
+        <span style="color: #3a6dd2;">y_pred_prob</span> = gmm.predict_proba(hle)
+        <span style="color: #3a6dd2;">y_pred</span> = y_pred_prob.argmax(1)
+        <span style="color: #3a6dd2;">y_pred</span> = np.asarray(y_pred)
+
+        <span style="color: #3a6dd2;">acc</span> = np.<span style="color: #1f6fbf; font-weight: bold;">round</span>(cluster_acc(y, y_pred), 5)
+        <span style="color: #3a6dd2;">nmi</span> = np.<span style="color: #1f6fbf; font-weight: bold;">round</span>(metrics.normalized_mutual_info_score(y, y_pred), 5)
+        <span style="color: #3a6dd2;">ari</span> = np.<span style="color: #1f6fbf; font-weight: bold;">round</span>(metrics.adjusted_rand_score(y, y_pred), 5)
+
+        plot(hle, y, f<span style="color: #4244ef;">"</span>{name}<span style="color: #4244ef;"> true labels"</span>)
+        <span style="color: #3a6dd2;">best_fit</span>, <span style="color: #3a6dd2;">_</span>, <span style="color: #3a6dd2;">_</span> = best_cluster_fit(y, y_pred)
+        plot(hle, best_fit, f<span style="color: #4244ef;">"</span>{name}<span style="color: #4244ef;"> predicted labels"</span>)
+
+        <span style="color: #3a6dd2;">res</span> += [(name, acc, nmi, ari)]
+  <span style="color: #004fc0; font-weight: bold;">return</span> res
+</pre>
+</div>
+</div>
+<div id="outline-container-orgdd7b1e6" class="outline-4">
+<h4 id="orgdd7b1e6">UMAP manifold</h4>
+<div class="outline-text-4" id="text-orgdd7b1e6">
+<p>
+We'll apply <code>umap</code> to our encoded space and then cluster it with
+<code>gmm</code>, mesure its accuracy and nmi and plot the data on a 2d map.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #3a6dd2;">res</span> += cluster_embedded(umap_manifold, <span style="color: #4244ef;">'umap'</span>)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8161276" class="outline-4">
+<h4 id="org8161276">t-SNE manifold</h4>
+<div class="outline-text-4" id="text-org8161276">
+<p>
+We'll apply <code>t-SNE</code> to our encoded space and cluster it with
+<code>gmm</code>, mesure its accuracy and nmi and plot the data on a 2d map.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #3a6dd2;">res</span> += cluster_embedded(tsne_manifold, <span style="color: #4244ef;">'t-SNE'</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc75f380" class="outline-4">
+<h4 id="orgc75f380">ISOMAP manifold</h4>
+<div class="outline-text-4" id="text-orgc75f380">
+<p>
+We'll apply <code>isomap</code> to our encoded space and cluster it with
+<code>gmm</code>, mesure its accuracy and nmi and plot the data on a 2d map.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #3a6dd2;">res</span> += cluster_embedded(isomap_manifold, <span style="color: #4244ef;">'isomap'</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb660f6d" class="outline-2">
+<h2 id="orgb660f6d">Results</h2>
+<div class="outline-text-2" id="text-orgb660f6d">
+<p>
+Finally we can print our total results.
+</p>
+
+<p>
+As we can see our experiment confirmed the results of the original
+paper. The model outperforms shallow clustering, as <code>gmm</code> and
+<code>kMeans</code> reach a far lower accuracy and normalized mutual
+information score than the model, regardless of the manifold
+embedding we used. Another observation is that UMAP (focused on
+local manifold, but with a better preservation of global manifold)
+is the best across the bord, outperforming t-SNE and isomap.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">print_res(res)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Luca Zaninotto</p>
+<p class="date">Created: 2023-02-08 Wed 10:40</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
