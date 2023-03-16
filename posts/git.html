@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-02-23 Thu 22:29 -->
+<!-- 2023-03-16 Thu 15:57 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Git</title>
@@ -319,7 +319,7 @@ Muoviamoci in una cartella vuota, da qui faremo tutto
 
 <div class="org-src-container">
 <pre class="src src-sh">mkdir ~/git_demo;
-<span style="color: #3fb83f; font-weight: bold;">cd</span> ~/git_demo
+<span style="color: #8f0075;">cd</span> ~/git_demo
 </pre>
 </div>
 </div>
@@ -395,7 +395,7 @@ Vogliamo ora aggiungere dei file alla nostra cartella e fare un
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #3fb83f; font-weight: bold;">echo</span> <span style="color: #af9fff;">"hello world!"</span> &gt; hello.txt
+<pre class="src src-sh"><span style="color: #8f0075;">echo</span> <span style="color: #2544bb;">"hello world!"</span> &gt; hello.txt
 </pre>
 </div>
 
@@ -445,7 +445,7 @@ fare un commit e registrare lo state corrente della storia facciamo
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">git commit -m <span style="color: #af9fff;">"added hello.txt"</span>
+<pre class="src src-sh">git commit -m <span style="color: #2544bb;">"added hello.txt"</span>
 </pre>
 </div>
 
@@ -606,7 +606,7 @@ non lo stiamo ancora <i>guardando</i>. possiamo farlo con
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">git checkout feature    <span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">-b for ~branch~</span>
+<pre class="src src-sh">git checkout feature    <span style="color: #505050;"># </span><span style="color: #505050;">-b for ~branch~</span>
 </pre>
 </div>
 
@@ -629,10 +629,10 @@ che ora il nostro grafo ha un biforcazione.
 
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #3fb83f; font-weight: bold;">echo</span> <span style="color: #af9fff;">"another line"</span> &gt;&gt; hello.txt
+<pre class="src src-sh"><span style="color: #8f0075;">echo</span> <span style="color: #2544bb;">"another line"</span> &gt;&gt; hello.txt
 
 git add hello.txt
-git commit -m <span style="color: #af9fff;">"updated hello.txt"</span>
+git commit -m <span style="color: #2544bb;">"updated hello.txt"</span>
 </pre>
 </div>
 
@@ -816,7 +816,7 @@ branch <code>&lt;remote branch&gt;</code> del remote <code>&lt;remote&gt;</code>
 Prendono le modifiche che abbiamo fatto con
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">git pull                        <span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">macro per git fetch; git merge</span>
+<pre class="src src-sh">git pull                        <span style="color: #505050;"># </span><span style="color: #505050;">macro per git fetch; git merge</span>
 </pre>
 </div>
 <p>
@@ -864,7 +864,7 @@ Git</a> (con più riferimenti, esercizi e risorse).
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Luca Zaninotto</p>
-<p class="date">Created: 2023-02-23 Thu 22:29</p>
+<p class="date">Created: 2023-03-16 Thu 15:57</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

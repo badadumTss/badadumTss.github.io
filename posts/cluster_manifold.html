@@ -1,196 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-02-08 Wed 22:37 -->
+<!-- 2023-03-16 Thu 15:57 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Clustering of a local manifold</title>
 <meta name="author" content="Luca Zaninotto" />
 <meta name="generator" content="Org Mode" />
-<style>
-  #content { max-width: 60em; margin: auto; }
-  .title  { text-align: center;
-             margin-bottom: .2em; }
-  .subtitle { text-align: center;
-              font-size: medium;
-              font-weight: bold;
-              margin-top:0; }
-  .todo   { font-family: monospace; color: red; }
-  .done   { font-family: monospace; color: green; }
-  .priority { font-family: monospace; color: orange; }
-  .tag    { background-color: #eee; font-family: monospace;
-            padding: 2px; font-size: 80%; font-weight: normal; }
-  .timestamp { color: #bebebe; }
-  .timestamp-kwd { color: #5f9ea0; }
-  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
-  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
-  .underline { text-decoration: underline; }
-  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
-  p.verse { margin-left: 3%; }
-  pre {
-    border: 1px solid #e6e6e6;
-    border-radius: 3px;
-    background-color: #f2f2f2;
-    padding: 8pt;
-    font-family: monospace;
-    overflow: auto;
-    margin: 1.2em;
-  }
-  pre.src {
-    position: relative;
-    overflow: auto;
-  }
-  pre.src:before {
-    display: none;
-    position: absolute;
-    top: -8px;
-    right: 12px;
-    padding: 3px;
-    color: #555;
-    background-color: #f2f2f299;
-  }
-  pre.src:hover:before { display: inline; margin-top: 14px;}
-  /* Languages per Org manual */
-  pre.src-asymptote:before { content: 'Asymptote'; }
-  pre.src-awk:before { content: 'Awk'; }
-  pre.src-authinfo::before { content: 'Authinfo'; }
-  pre.src-C:before { content: 'C'; }
-  /* pre.src-C++ doesn't work in CSS */
-  pre.src-clojure:before { content: 'Clojure'; }
-  pre.src-css:before { content: 'CSS'; }
-  pre.src-D:before { content: 'D'; }
-  pre.src-ditaa:before { content: 'ditaa'; }
-  pre.src-dot:before { content: 'Graphviz'; }
-  pre.src-calc:before { content: 'Emacs Calc'; }
-  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-fortran:before { content: 'Fortran'; }
-  pre.src-gnuplot:before { content: 'gnuplot'; }
-  pre.src-haskell:before { content: 'Haskell'; }
-  pre.src-hledger:before { content: 'hledger'; }
-  pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
-  pre.src-latex:before { content: 'LaTeX'; }
-  pre.src-ledger:before { content: 'Ledger'; }
-  pre.src-lisp:before { content: 'Lisp'; }
-  pre.src-lilypond:before { content: 'Lilypond'; }
-  pre.src-lua:before { content: 'Lua'; }
-  pre.src-matlab:before { content: 'MATLAB'; }
-  pre.src-mscgen:before { content: 'Mscgen'; }
-  pre.src-ocaml:before { content: 'Objective Caml'; }
-  pre.src-octave:before { content: 'Octave'; }
-  pre.src-org:before { content: 'Org mode'; }
-  pre.src-oz:before { content: 'OZ'; }
-  pre.src-plantuml:before { content: 'Plantuml'; }
-  pre.src-processing:before { content: 'Processing.js'; }
-  pre.src-python:before { content: 'Python'; }
-  pre.src-R:before { content: 'R'; }
-  pre.src-ruby:before { content: 'Ruby'; }
-  pre.src-sass:before { content: 'Sass'; }
-  pre.src-scheme:before { content: 'Scheme'; }
-  pre.src-screen:before { content: 'Gnu Screen'; }
-  pre.src-sed:before { content: 'Sed'; }
-  pre.src-sh:before { content: 'shell'; }
-  pre.src-sql:before { content: 'SQL'; }
-  pre.src-sqlite:before { content: 'SQLite'; }
-  /* additional languages in org.el's org-babel-load-languages alist */
-  pre.src-forth:before { content: 'Forth'; }
-  pre.src-io:before { content: 'IO'; }
-  pre.src-J:before { content: 'J'; }
-  pre.src-makefile:before { content: 'Makefile'; }
-  pre.src-maxima:before { content: 'Maxima'; }
-  pre.src-perl:before { content: 'Perl'; }
-  pre.src-picolisp:before { content: 'Pico Lisp'; }
-  pre.src-scala:before { content: 'Scala'; }
-  pre.src-shell:before { content: 'Shell Script'; }
-  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
-  /* additional language identifiers per "defun org-babel-execute"
-       in ob-*.el */
-  pre.src-cpp:before  { content: 'C++'; }
-  pre.src-abc:before  { content: 'ABC'; }
-  pre.src-coq:before  { content: 'Coq'; }
-  pre.src-groovy:before  { content: 'Groovy'; }
-  /* additional language identifiers from org-babel-shell-names in
-     ob-shell.el: ob-shell is the only babel language using a lambda to put
-     the execution function name together. */
-  pre.src-bash:before  { content: 'bash'; }
-  pre.src-csh:before  { content: 'csh'; }
-  pre.src-ash:before  { content: 'ash'; }
-  pre.src-dash:before  { content: 'dash'; }
-  pre.src-ksh:before  { content: 'ksh'; }
-  pre.src-mksh:before  { content: 'mksh'; }
-  pre.src-posh:before  { content: 'posh'; }
-  /* Additional Emacs modes also supported by the LaTeX listings package */
-  pre.src-ada:before { content: 'Ada'; }
-  pre.src-asm:before { content: 'Assembler'; }
-  pre.src-caml:before { content: 'Caml'; }
-  pre.src-delphi:before { content: 'Delphi'; }
-  pre.src-html:before { content: 'HTML'; }
-  pre.src-idl:before { content: 'IDL'; }
-  pre.src-mercury:before { content: 'Mercury'; }
-  pre.src-metapost:before { content: 'MetaPost'; }
-  pre.src-modula-2:before { content: 'Modula-2'; }
-  pre.src-pascal:before { content: 'Pascal'; }
-  pre.src-ps:before { content: 'PostScript'; }
-  pre.src-prolog:before { content: 'Prolog'; }
-  pre.src-simula:before { content: 'Simula'; }
-  pre.src-tcl:before { content: 'tcl'; }
-  pre.src-tex:before { content: 'TeX'; }
-  pre.src-plain-tex:before { content: 'Plain TeX'; }
-  pre.src-verilog:before { content: 'Verilog'; }
-  pre.src-vhdl:before { content: 'VHDL'; }
-  pre.src-xml:before { content: 'XML'; }
-  pre.src-nxml:before { content: 'XML'; }
-  /* add a generic configuration mode; LaTeX export needs an additional
-     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
-  pre.src-conf:before { content: 'Configuration File'; }
-
-  table { border-collapse:collapse; }
-  caption.t-above { caption-side: top; }
-  caption.t-bottom { caption-side: bottom; }
-  td, th { vertical-align:top;  }
-  th.org-right  { text-align: center;  }
-  th.org-left   { text-align: center;   }
-  th.org-center { text-align: center; }
-  td.org-right  { text-align: right;  }
-  td.org-left   { text-align: left;   }
-  td.org-center { text-align: center; }
-  dt { font-weight: bold; }
-  .footpara { display: inline; }
-  .footdef  { margin-bottom: 1em; }
-  .figure { padding: 1em; }
-  .figure p { text-align: center; }
-  .equation-container {
-    display: table;
-    text-align: center;
-    width: 100%;
-  }
-  .equation {
-    vertical-align: middle;
-  }
-  .equation-label {
-    display: table-cell;
-    text-align: right;
-    vertical-align: middle;
-  }
-  .inlinetask {
-    padding: 10px;
-    border: 2px solid gray;
-    margin: 10px;
-    background: #ffffcc;
-  }
-  #org-div-home-and-up
-   { text-align: right; font-size: 70%; white-space: nowrap; }
-  textarea { overflow-x: auto; }
-  .linenr { font-size: smaller }
-  .code-highlighted { background-color: #ffff00; }
-  .org-info-js_info-navigation { border-style: none; }
-  #org-info-js_console-label
-    { font-size: 10px; font-weight: bold; white-space: nowrap; }
-  .org-info-js_search-highlight
-    { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { }
-</style>
 <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
 </head>
 <body>
@@ -234,22 +50,22 @@ In this section we'll import all the necessary libraries, such as
 <h3 id="org02669bf">The libraries</h3>
 <div class="outline-text-3" id="text-org02669bf">
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">Matplotlib and numpy</span>
-<span style="color: #00c089; font-weight: bold;">import</span> matplotlib.pyplot <span style="color: #00c089; font-weight: bold;">as</span> plt
-<span style="color: #00c089; font-weight: bold;">import</span> numpy <span style="color: #00c089; font-weight: bold;">as</span> np
+<pre class="src src-python"><span style="color: #505050;"># </span><span style="color: #505050;">Matplotlib and numpy</span>
+<span style="color: #5317ac;">import</span> matplotlib.pyplot <span style="color: #5317ac;">as</span> plt
+<span style="color: #5317ac;">import</span> numpy <span style="color: #5317ac;">as</span> np
 
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">torch, datasets and its utilities</span>
-<span style="color: #00c089; font-weight: bold;">import</span> torch
-<span style="color: #00c089; font-weight: bold;">import</span> torch.nn <span style="color: #00c089; font-weight: bold;">as</span> nn
-<span style="color: #00c089; font-weight: bold;">import</span> torch.optim <span style="color: #00c089; font-weight: bold;">as</span> optim
-<span style="color: #00c089; font-weight: bold;">import</span> torchvision
-<span style="color: #00c089; font-weight: bold;">import</span> random
+<span style="color: #505050;"># </span><span style="color: #505050;">torch, datasets and its utilities</span>
+<span style="color: #5317ac;">import</span> torch
+<span style="color: #5317ac;">import</span> torch.nn <span style="color: #5317ac;">as</span> nn
+<span style="color: #5317ac;">import</span> torch.optim <span style="color: #5317ac;">as</span> optim
+<span style="color: #5317ac;">import</span> torchvision
+<span style="color: #5317ac;">import</span> random
 
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">switch to gpu if available</span>
-<span style="color: #78afff;">device</span> = torch.device(<span style="color: #af9fff;">"cuda"</span> <span style="color: #00c089; font-weight: bold;">if</span> torch.cuda.is_available() <span style="color: #00c089; font-weight: bold;">else</span> <span style="color: #af9fff;">"cpu"</span>)
-<span style="color: #3fb83f; font-weight: bold;">print</span>(<span style="color: #af9fff;">'Using device: '</span>, device)
+<span style="color: #505050;"># </span><span style="color: #505050;">switch to gpu if available</span>
+<span style="color: #00538b;">device</span> = torch.device(<span style="color: #2544bb;">"cuda"</span> <span style="color: #5317ac;">if</span> torch.cuda.is_available() <span style="color: #5317ac;">else</span> <span style="color: #2544bb;">"cpu"</span>)
+<span style="color: #8f0075;">print</span>(<span style="color: #2544bb;">'Using device: '</span>, device)
 
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">setting random seeds for reproducibility</span>
+<span style="color: #505050;"># </span><span style="color: #505050;">setting random seeds for reproducibility</span>
 torch.manual_seed(0)
 np.random.seed(0)
 random.seed(0)
@@ -267,32 +83,32 @@ test datasets, in order to do so we need the loaders for both the test
 and train data
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">from</span> torchvision <span style="color: #00c089; font-weight: bold;">import</span> datasets <span style="color: #00c089; font-weight: bold;">as</span> dts
-<span style="color: #00c089; font-weight: bold;">from</span> torchvision.transforms <span style="color: #00c089; font-weight: bold;">import</span> ToTensor 
+<pre class="src src-python"><span style="color: #5317ac;">from</span> torchvision <span style="color: #5317ac;">import</span> datasets <span style="color: #5317ac;">as</span> dts
+<span style="color: #5317ac;">from</span> torchvision.transforms <span style="color: #5317ac;">import</span> ToTensor 
 
-<span style="color: #78afff;">train_data</span> = dts.MNIST(
-    root = <span style="color: #af9fff;">'data'</span>,
-    train = <span style="color: #37aff6;">True</span>,                         
+<span style="color: #00538b;">train_data</span> = dts.MNIST(
+    root = <span style="color: #2544bb;">'data'</span>,
+    train = <span style="color: #0000c0;">True</span>,                         
     transform = ToTensor(), 
-    download = <span style="color: #37aff6;">True</span>,            
+    download = <span style="color: #0000c0;">True</span>,            
 )
 
 test_data = dts.MNIST(
-    root = <span style="color: #af9fff;">'data'</span>, 
-    train = <span style="color: #37aff6;">False</span>, 
+    root = <span style="color: #2544bb;">'data'</span>, 
+    train = <span style="color: #0000c0;">False</span>, 
     transform = ToTensor()
 )
 
 train_loader = torch.utils.data.DataLoader(
     train_data, 
     batch_size=128, 
-    shuffle=<span style="color: #37aff6;">True</span>,
+    shuffle=<span style="color: #0000c0;">True</span>,
 )
 
 test_loader = torch.utils.data.DataLoader(
     test_data, 
     batch_size=20, 
-    shuffle=<span style="color: #37aff6;">True</span>
+    shuffle=<span style="color: #0000c0;">True</span>
 )
 
 </pre>
@@ -302,9 +118,9 @@ test_loader = torch.utils.data.DataLoader(
 </div>
 
 
-<div id="outline-container-org1473bf4" class="outline-2">
-<h2 id="org1473bf4">The autoencoder</h2>
-<div class="outline-text-2" id="text-org1473bf4">
+<div id="outline-container-org3cac973" class="outline-2">
+<h2 id="org3cac973">The autoencoder</h2>
+<div class="outline-text-2" id="text-org3cac973">
 <p>
 As described in the paper, the first component of our model is the
 autoencoder, takes as input the image as an array of dimensionality
@@ -327,27 +143,27 @@ from the raw data, the output is 2000 unit.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">class</span> <span style="color: #7fcfdf;">Encoder</span>(nn.Module):
-    <span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">__init__</span>(<span style="color: #00c089; font-weight: bold;">self</span>, shape):
-        <span style="color: #3fb83f; font-weight: bold;">super</span>().__init__()
-        <span style="color: #00c089; font-weight: bold;">self</span>.<span style="color: #78afff;">encoder_hidden_layer_1</span> = nn.Linear(
+<pre class="src src-python"><span style="color: #5317ac;">class</span> <span style="color: #005a5f;">Encoder</span>(nn.Module):
+    <span style="color: #5317ac;">def</span> <span style="color: #721045;">__init__</span>(<span style="color: #5317ac;">self</span>, shape):
+        <span style="color: #8f0075;">super</span>().__init__()
+        <span style="color: #5317ac;">self</span>.<span style="color: #00538b;">encoder_hidden_layer_1</span> = nn.Linear(
             in_features=shape, out_features=500
         )
-        <span style="color: #00c089; font-weight: bold;">self</span>.encoder_hidden_layer_2 = nn.Linear(
+        <span style="color: #5317ac;">self</span>.encoder_hidden_layer_2 = nn.Linear(
             in_features=500, out_features=500
         )
-        <span style="color: #00c089; font-weight: bold;">self</span>.encoder_output_layer = nn.Linear(
+        <span style="color: #5317ac;">self</span>.encoder_output_layer = nn.Linear(
             in_features=500, out_features=2000
         )
 
-    <span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">forward</span>(<span style="color: #00c089; font-weight: bold;">self</span>, features):
-        activation = <span style="color: #00c089; font-weight: bold;">self</span>.encoder_hidden_layer_1(features)
+    <span style="color: #5317ac;">def</span> <span style="color: #721045;">forward</span>(<span style="color: #5317ac;">self</span>, features):
+        activation = <span style="color: #5317ac;">self</span>.encoder_hidden_layer_1(features)
         activation = torch.relu(activation)
-        activation = <span style="color: #00c089; font-weight: bold;">self</span>.encoder_hidden_layer_2(activation)
+        activation = <span style="color: #5317ac;">self</span>.encoder_hidden_layer_2(activation)
         activation = torch.relu(activation)
-        code = <span style="color: #00c089; font-weight: bold;">self</span>.encoder_output_layer(activation)
+        code = <span style="color: #5317ac;">self</span>.encoder_output_layer(activation)
         code = torch.sigmoid(code)
-        <span style="color: #00c089; font-weight: bold;">return</span> code
+        <span style="color: #5317ac;">return</span> code
 </pre>
 </div>
 </div>
@@ -365,63 +181,63 @@ in order to get the best possible encoding.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">class</span> <span style="color: #7fcfdf;">Decoder</span>(nn.Module):
-    <span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">__init__</span>(<span style="color: #00c089; font-weight: bold;">self</span>, shape):
-        <span style="color: #3fb83f; font-weight: bold;">super</span>().__init__()
-        <span style="color: #00c089; font-weight: bold;">self</span>.<span style="color: #78afff;">decoder_hidden_layer_1</span> = nn.Linear(
+<pre class="src src-python"><span style="color: #5317ac;">class</span> <span style="color: #005a5f;">Decoder</span>(nn.Module):
+    <span style="color: #5317ac;">def</span> <span style="color: #721045;">__init__</span>(<span style="color: #5317ac;">self</span>, shape):
+        <span style="color: #8f0075;">super</span>().__init__()
+        <span style="color: #5317ac;">self</span>.<span style="color: #00538b;">decoder_hidden_layer_1</span> = nn.Linear(
             in_features=2000, out_features=500
         )
-        <span style="color: #00c089; font-weight: bold;">self</span>.decoder_hidden_layer_2 = nn.Linear(
+        <span style="color: #5317ac;">self</span>.decoder_hidden_layer_2 = nn.Linear(
             in_features=500, out_features=500
         )
-        <span style="color: #00c089; font-weight: bold;">self</span>.decoder_output_layer = nn.Linear(
+        <span style="color: #5317ac;">self</span>.decoder_output_layer = nn.Linear(
             in_features=500, out_features=shape
         )
 
-    <span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">forward</span>(<span style="color: #00c089; font-weight: bold;">self</span>, code):
-        activation = <span style="color: #00c089; font-weight: bold;">self</span>.decoder_hidden_layer_1(code)
+    <span style="color: #5317ac;">def</span> <span style="color: #721045;">forward</span>(<span style="color: #5317ac;">self</span>, code):
+        activation = <span style="color: #5317ac;">self</span>.decoder_hidden_layer_1(code)
         activation = torch.relu(activation)
-        activation = <span style="color: #00c089; font-weight: bold;">self</span>.decoder_hidden_layer_2(activation)
+        activation = <span style="color: #5317ac;">self</span>.decoder_hidden_layer_2(activation)
         activation = torch.relu(activation)
-        activation = <span style="color: #00c089; font-weight: bold;">self</span>.decoder_output_layer(activation)
+        activation = <span style="color: #5317ac;">self</span>.decoder_output_layer(activation)
         reconstructed = torch.sigmoid(activation)
-        <span style="color: #00c089; font-weight: bold;">return</span> reconstructed
+        <span style="color: #5317ac;">return</span> reconstructed
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org74d0af4" class="outline-3">
-<h3 id="org74d0af4">The autoencoder</h3>
-<div class="outline-text-3" id="text-org74d0af4">
+<div id="outline-container-orgc8af94c" class="outline-3">
+<h3 id="orgc8af94c">The autoencoder</h3>
+<div class="outline-text-3" id="text-orgc8af94c">
 <p>
 The resulting network is the combination of the two
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">class</span> <span style="color: #7fcfdf;">AE</span>(nn.Module):
-    <span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">__init__</span>(<span style="color: #00c089; font-weight: bold;">self</span>, shape):
-        <span style="color: #3fb83f; font-weight: bold;">super</span>().__init__()
-        <span style="color: #00c089; font-weight: bold;">self</span>.<span style="color: #78afff;">encoder</span> = Encoder(shape)
-        <span style="color: #00c089; font-weight: bold;">self</span>.<span style="color: #78afff;">decoder</span> = Decoder(shape)
+<pre class="src src-python"><span style="color: #5317ac;">class</span> <span style="color: #005a5f;">AE</span>(nn.Module):
+    <span style="color: #5317ac;">def</span> <span style="color: #721045;">__init__</span>(<span style="color: #5317ac;">self</span>, shape):
+        <span style="color: #8f0075;">super</span>().__init__()
+        <span style="color: #5317ac;">self</span>.<span style="color: #00538b;">encoder</span> = Encoder(shape)
+        <span style="color: #5317ac;">self</span>.<span style="color: #00538b;">decoder</span> = Decoder(shape)
 
-    <span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">forward</span>(<span style="color: #00c089; font-weight: bold;">self</span>, features):
-        <span style="color: #78afff;">code</span> = <span style="color: #00c089; font-weight: bold;">self</span>.encoder.forward(features)
-        <span style="color: #78afff;">reconstructed</span> = <span style="color: #00c089; font-weight: bold;">self</span>.decoder.forward(code)
-        <span style="color: #00c089; font-weight: bold;">return</span> reconstructed
+    <span style="color: #5317ac;">def</span> <span style="color: #721045;">forward</span>(<span style="color: #5317ac;">self</span>, features):
+        <span style="color: #00538b;">code</span> = <span style="color: #5317ac;">self</span>.encoder.forward(features)
+        <span style="color: #00538b;">reconstructed</span> = <span style="color: #5317ac;">self</span>.decoder.forward(code)
+        <span style="color: #5317ac;">return</span> reconstructed
 </pre>
 </div>
 <p>
 We can now instanciate our model
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">create a model from ~AE~ autoencoder class</span>
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">load it to the specified device, either gpu or cpu</span>
-<span style="color: #78afff;">model</span> = AE(784).to(device)
+<pre class="src src-python"><span style="color: #505050;"># </span><span style="color: #505050;">create a model from ~AE~ autoencoder class</span>
+<span style="color: #505050;"># </span><span style="color: #505050;">load it to the specified device, either gpu or cpu</span>
+<span style="color: #00538b;">model</span> = AE(784).to(device)
 
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">create an optimizer object</span>
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">Adam optimizer with learning rate 1e-3</span>
-<span style="color: #78afff;">optimizer</span> = optim.Adam(model.parameters(), lr=1e-3)
+<span style="color: #505050;"># </span><span style="color: #505050;">create an optimizer object</span>
+<span style="color: #505050;"># </span><span style="color: #505050;">Adam optimizer with learning rate 1e-3</span>
+<span style="color: #00538b;">optimizer</span> = optim.Adam(model.parameters(), lr=1e-3)
 
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">mean-squared error loss</span>
+<span style="color: #505050;"># </span><span style="color: #505050;">mean-squared error loss</span>
 criterion = nn.MSELoss()
 </pre>
 </div>
@@ -429,27 +245,27 @@ criterion = nn.MSELoss()
 and train it
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #78afff;">epochs</span> = 20
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">Set this to False to load the weights of the last successful run</span>
-<span style="color: #78afff;">train</span> = <span style="color: #37aff6;">True</span>
-<span style="color: #78afff;">path</span> = <span style="color: #af9fff;">"weights.pt"</span>
+<pre class="src src-python"><span style="color: #00538b;">epochs</span> = 20
+<span style="color: #505050;"># </span><span style="color: #505050;">Set this to False to load the weights of the last successful run</span>
+<span style="color: #00538b;">train</span> = <span style="color: #0000c0;">True</span>
+<span style="color: #00538b;">path</span> = <span style="color: #2544bb;">"weights.pt"</span>
 
-<span style="color: #00c089; font-weight: bold;">if</span> <span style="color: #78afff;">train</span>:
-  <span style="color: #00c089; font-weight: bold;">for</span> epoch <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #3fb83f; font-weight: bold;">range</span>(epochs):
+<span style="color: #5317ac;">if</span> <span style="color: #00538b;">train</span>:
+  <span style="color: #5317ac;">for</span> epoch <span style="color: #5317ac;">in</span> <span style="color: #8f0075;">range</span>(epochs):
     loss = 0
-      <span style="color: #00c089; font-weight: bold;">for</span> x, _ <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #78afff;">train_loader</span>:
+      <span style="color: #5317ac;">for</span> x, _ <span style="color: #5317ac;">in</span> <span style="color: #00538b;">train_loader</span>:
         x = x.view(-1, 784).to(device)
         optimizer.zero_grad()
-        <span style="color: #78afff;">outputs</span> = model(x)
-        <span style="color: #78afff;">train_loss</span> = criterion(outputs, x)
+        <span style="color: #00538b;">outputs</span> = model(x)
+        <span style="color: #00538b;">train_loss</span> = criterion(outputs, x)
         train_loss.backward()
         optimizer.step()
-        <span style="color: #78afff;">loss</span> += train_loss.item()
+        <span style="color: #00538b;">loss</span> += train_loss.item()
 
-      <span style="color: #78afff;">loss</span> = loss / <span style="color: #3fb83f; font-weight: bold;">len</span>(train_loader)
-      <span style="color: #3fb83f; font-weight: bold;">print</span>(<span style="color: #af9fff;">"epoch : {}/{}, loss = {:.6f}"</span>.<span style="color: #3fb83f; font-weight: bold;">format</span>(epoch + 1, epochs, loss))
+      <span style="color: #00538b;">loss</span> = loss / <span style="color: #8f0075;">len</span>(train_loader)
+      <span style="color: #8f0075;">print</span>(<span style="color: #2544bb;">"epoch : {}/{}, loss = {:.6f}"</span>.<span style="color: #8f0075;">format</span>(epoch + 1, epochs, loss))
       torch.save(model.state_dict(), path)
-<span style="color: #00c089; font-weight: bold;">else</span>:
+<span style="color: #5317ac;">else</span>:
   model.load_state_dict(torch.load(path))
 </pre>
 </div>
@@ -466,35 +282,35 @@ or not.  On top there are the initial images, and below the
 reconstructed ones. As we can see the accuracy became pretty high.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #78afff;">test_examples</span> = <span style="color: #37aff6;">None</span>
-model.<span style="color: #3fb83f; font-weight: bold;">eval</span>()
+<pre class="src src-python"><span style="color: #00538b;">test_examples</span> = <span style="color: #0000c0;">None</span>
+model.<span style="color: #8f0075;">eval</span>()
 
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">Test it over the first data of the test dataset</span>
-<span style="color: #00c089; font-weight: bold;">with</span> torch.no_grad():
-    <span style="color: #00c089; font-weight: bold;">for</span> batch_features <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #78afff;">test_loader</span>:
+<span style="color: #505050;"># </span><span style="color: #505050;">Test it over the first data of the test dataset</span>
+<span style="color: #5317ac;">with</span> torch.no_grad():
+    <span style="color: #5317ac;">for</span> batch_features <span style="color: #5317ac;">in</span> <span style="color: #00538b;">test_loader</span>:
         batch_features = batch_features[0].to(device)
-        <span style="color: #78afff;">test_examples</span> = batch_features.view(-1, 784)
-        <span style="color: #78afff;">reconstruction</span> = model(test_examples)
-        <span style="color: #00c089; font-weight: bold;">break</span>
+        <span style="color: #00538b;">test_examples</span> = batch_features.view(-1, 784)
+        <span style="color: #00538b;">reconstruction</span> = model(test_examples)
+        <span style="color: #5317ac;">break</span>
 
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">Plot results</span>
-<span style="color: #00c089; font-weight: bold;">with</span> torch.no_grad():
-    <span style="color: #78afff;">number</span> = 10
+<span style="color: #505050;"># </span><span style="color: #505050;">Plot results</span>
+<span style="color: #5317ac;">with</span> torch.no_grad():
+    <span style="color: #00538b;">number</span> = 10
     plt.figure(figsize=(20, 4))
-    <span style="color: #00c089; font-weight: bold;">for</span> index <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #3fb83f; font-weight: bold;">range</span>(number):
-        <span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">display original</span>
+    <span style="color: #5317ac;">for</span> index <span style="color: #5317ac;">in</span> <span style="color: #8f0075;">range</span>(number):
+        <span style="color: #505050;"># </span><span style="color: #505050;">display original</span>
         ax = plt.subplot(2, number, index + 1)
         plt.imshow(test_examples[index].cpu().numpy().reshape(28, 28))
         plt.gray()
-        ax.get_xaxis().set_visible(<span style="color: #37aff6;">False</span>)
-        ax.get_yaxis().set_visible(<span style="color: #37aff6;">False</span>)
+        ax.get_xaxis().set_visible(<span style="color: #0000c0;">False</span>)
+        ax.get_yaxis().set_visible(<span style="color: #0000c0;">False</span>)
 
-        <span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">display reconstruction</span>
+        <span style="color: #505050;"># </span><span style="color: #505050;">display reconstruction</span>
         ax = plt.subplot(2, number, index + 1 + number)
         plt.imshow(reconstruction[index].cpu().numpy().reshape(28, 28))
         plt.gray()
-        ax.get_xaxis().set_visible(<span style="color: #37aff6;">False</span>)
-        ax.get_yaxis().set_visible(<span style="color: #37aff6;">False</span>)
+        ax.get_xaxis().set_visible(<span style="color: #0000c0;">False</span>)
+        ax.get_yaxis().set_visible(<span style="color: #0000c0;">False</span>)
         plt.show()
 </pre>
 </div>
@@ -510,14 +326,14 @@ layer. So let's split the autoencoder component and provider its
 output as input for the next component: the manifold learner.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #78afff;">encoder</span> = model.encoder
-encoder.<span style="color: #3fb83f; font-weight: bold;">eval</span>()
+<pre class="src src-python"><span style="color: #00538b;">encoder</span> = model.encoder
+encoder.<span style="color: #8f0075;">eval</span>()
 
-<span style="color: #00c089; font-weight: bold;">with</span> torch.no_grad():
-    <span style="color: #00c089; font-weight: bold;">for</span> batch_features <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #78afff;">test_loader</span>:
+<span style="color: #5317ac;">with</span> torch.no_grad():
+    <span style="color: #5317ac;">for</span> batch_features <span style="color: #5317ac;">in</span> <span style="color: #00538b;">test_loader</span>:
         batch_features = batch_features[0].to(device)
-        <span style="color: #78afff;">test_examples</span> = batch_features.view(-1, 784)
-        <span style="color: #78afff;">hl</span> = encoder(test_examples)
+        <span style="color: #00538b;">test_examples</span> = batch_features.view(-1, 784)
+        <span style="color: #00538b;">hl</span> = encoder(test_examples)
 </pre>
 </div>
 </div>
@@ -559,11 +375,11 @@ of the global structure.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">import</span> umap
+<pre class="src src-python"><span style="color: #5317ac;">import</span> umap
 
-<span style="color: #78afff;">umap_manifold</span> = umap.UMAP(
+<span style="color: #00538b;">umap_manifold</span> = umap.UMAP(
     random_state=0,
-    metric=<span style="color: #af9fff;">'euclidean'</span>,
+    metric=<span style="color: #2544bb;">'euclidean'</span>,
     n_components=10,
     n_neighbors=20,
     min_dist=0.0)
@@ -587,19 +403,19 @@ results in some problems.
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">try</span>:
-  <span style="color: #00c089; font-weight: bold;">from</span> MulticoreTSNE <span style="color: #00c089; font-weight: bold;">import</span> MulticoreTSNE <span style="color: #00c089; font-weight: bold;">as</span> TSNE
-<span style="color: #00c089; font-weight: bold;">except</span>:
-  <span style="color: #00c089; font-weight: bold;">from</span> sklearn.manifold <span style="color: #00c089; font-weight: bold;">import</span> TSNE
+<pre class="src src-python"><span style="color: #5317ac;">try</span>:
+  <span style="color: #5317ac;">from</span> MulticoreTSNE <span style="color: #5317ac;">import</span> MulticoreTSNE <span style="color: #5317ac;">as</span> TSNE
+<span style="color: #5317ac;">except</span>:
+  <span style="color: #5317ac;">from</span> sklearn.manifold <span style="color: #5317ac;">import</span> TSNE
 
 tsne_manifold = TSNE(
   n_components=2,
   n_jobs=16,
   random_state=0)
 
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">The fit outputs some warnings as current (9 Jan 2023), but I choose</span>
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">to ignore them since they are notices about future changes in the</span>
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">API (default parameters)</span>
+<span style="color: #505050;"># </span><span style="color: #505050;">The fit outputs some warnings as current (9 Jan 2023), but I choose</span>
+<span style="color: #505050;"># </span><span style="color: #505050;">to ignore them since they are notices about future changes in the</span>
+<span style="color: #505050;"># </span><span style="color: #505050;">API (default parameters)</span>
 </pre>
 </div>
 </div>
@@ -623,9 +439,9 @@ sklearn if we didn't alredy
 </div>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">from</span> sklearn.manifold <span style="color: #00c089; font-weight: bold;">import</span> Isomap
+<pre class="src src-python"><span style="color: #5317ac;">from</span> sklearn.manifold <span style="color: #5317ac;">import</span> Isomap
 
-<span style="color: #78afff;">isomap_manifold</span> = Isomap(
+<span style="color: #00538b;">isomap_manifold</span> = Isomap(
     n_components=10,
     n_neighbors=5)
 </pre>
@@ -646,16 +462,16 @@ random state of 0 for reproducibility.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">from</span> sklearn.mixture <span style="color: #00c089; font-weight: bold;">import</span> GaussianMixture
-<span style="color: #00c089; font-weight: bold;">from</span> sklearn.cluster <span style="color: #00c089; font-weight: bold;">import</span> KMeans
+<pre class="src src-python"><span style="color: #5317ac;">from</span> sklearn.mixture <span style="color: #5317ac;">import</span> GaussianMixture
+<span style="color: #5317ac;">from</span> sklearn.cluster <span style="color: #5317ac;">import</span> KMeans
 
-<span style="color: #78afff;">gmm</span> = GaussianMixture(
-    covariance_type=<span style="color: #af9fff;">'full'</span>,
+<span style="color: #00538b;">gmm</span> = GaussianMixture(
+    covariance_type=<span style="color: #2544bb;">'full'</span>,
     n_components=10,
     random_state=0)
 
 km = KMeans(
-    init=<span style="color: #af9fff;">'k-means++'</span>,
+    init=<span style="color: #2544bb;">'k-means++'</span>,
     n_clusters=10,
     random_state=0,
     n_init=20)
@@ -675,31 +491,31 @@ accuracy we have to define the measure ourselves.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">from</span> scipy.optimize <span style="color: #00c089; font-weight: bold;">import</span> linear_sum_assignment
+<pre class="src src-python"><span style="color: #5317ac;">from</span> scipy.optimize <span style="color: #5317ac;">import</span> linear_sum_assignment
 
-<span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">linear_assignment</span>(cost_matrix):
-    <span style="color: #78afff;">x</span>, <span style="color: #78afff;">y</span> = linear_sum_assignment(cost_matrix)
-    <span style="color: #00c089; font-weight: bold;">return</span> np.array(<span style="color: #3fb83f; font-weight: bold;">list</span>(<span style="color: #3fb83f; font-weight: bold;">zip</span>(x, y)))
+<span style="color: #5317ac;">def</span> <span style="color: #721045;">linear_assignment</span>(cost_matrix):
+    <span style="color: #00538b;">x</span>, <span style="color: #00538b;">y</span> = linear_sum_assignment(cost_matrix)
+    <span style="color: #5317ac;">return</span> np.array(<span style="color: #8f0075;">list</span>(<span style="color: #8f0075;">zip</span>(x, y)))
 
-<span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">best_cluster_fit</span>(y_true, y_pred):
-    <span style="color: #78afff;">y_true</span> = y_true.astype(np.int64)
-    <span style="color: #78afff;">D</span> = <span style="color: #3fb83f; font-weight: bold;">max</span>(y_pred.<span style="color: #3fb83f; font-weight: bold;">max</span>(), y_true.<span style="color: #3fb83f; font-weight: bold;">max</span>()) + 1
-    <span style="color: #78afff;">w</span> = np.zeros((D, D), dtype=np.int64)
-    <span style="color: #00c089; font-weight: bold;">for</span> i <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #3fb83f; font-weight: bold;">range</span>(y_pred.size):
-        <span style="color: #78afff;">w</span>[<span style="color: #78afff;">y_pred</span>[i], <span style="color: #78afff;">y_true</span>[i]] += 1
+<span style="color: #5317ac;">def</span> <span style="color: #721045;">best_cluster_fit</span>(y_true, y_pred):
+    <span style="color: #00538b;">y_true</span> = y_true.astype(np.int64)
+    <span style="color: #00538b;">D</span> = <span style="color: #8f0075;">max</span>(y_pred.<span style="color: #8f0075;">max</span>(), y_true.<span style="color: #8f0075;">max</span>()) + 1
+    <span style="color: #00538b;">w</span> = np.zeros((D, D), dtype=np.int64)
+    <span style="color: #5317ac;">for</span> i <span style="color: #5317ac;">in</span> <span style="color: #8f0075;">range</span>(y_pred.size):
+        <span style="color: #00538b;">w</span>[<span style="color: #00538b;">y_pred</span>[i], <span style="color: #00538b;">y_true</span>[i]] += 1
 
-    ind = linear_assignment(w.<span style="color: #3fb83f; font-weight: bold;">max</span>() - w)
+    ind = linear_assignment(w.<span style="color: #8f0075;">max</span>() - w)
     best_fit = []
-    <span style="color: #00c089; font-weight: bold;">for</span> i <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #3fb83f; font-weight: bold;">range</span>(y_pred.size):
-        <span style="color: #00c089; font-weight: bold;">for</span> j <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #3fb83f; font-weight: bold;">range</span>(<span style="color: #3fb83f; font-weight: bold;">len</span>(ind)):
-            <span style="color: #00c089; font-weight: bold;">if</span> ind[j][0] == y_pred[i]:
+    <span style="color: #5317ac;">for</span> i <span style="color: #5317ac;">in</span> <span style="color: #8f0075;">range</span>(y_pred.size):
+        <span style="color: #5317ac;">for</span> j <span style="color: #5317ac;">in</span> <span style="color: #8f0075;">range</span>(<span style="color: #8f0075;">len</span>(ind)):
+            <span style="color: #5317ac;">if</span> ind[j][0] == y_pred[i]:
                 best_fit.append(ind[j][1])
-    <span style="color: #00c089; font-weight: bold;">return</span> best_fit, ind, w
+    <span style="color: #5317ac;">return</span> best_fit, ind, w
 
 
-<span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">cluster_acc</span>(y_true, y_pred):
-    <span style="color: #78afff;">_</span>, <span style="color: #78afff;">ind</span>, <span style="color: #78afff;">w</span> = best_cluster_fit(y_true, y_pred)
-    <span style="color: #00c089; font-weight: bold;">return</span> <span style="color: #3fb83f; font-weight: bold;">sum</span>([w[i, j] <span style="color: #00c089; font-weight: bold;">for</span> i, j <span style="color: #00c089; font-weight: bold;">in</span> ind]) * 1.0 / y_pred.size
+<span style="color: #5317ac;">def</span> <span style="color: #721045;">cluster_acc</span>(y_true, y_pred):
+    <span style="color: #00538b;">_</span>, <span style="color: #00538b;">ind</span>, <span style="color: #00538b;">w</span> = best_cluster_fit(y_true, y_pred)
+    <span style="color: #5317ac;">return</span> <span style="color: #8f0075;">sum</span>([w[i, j] <span style="color: #5317ac;">for</span> i, j <span style="color: #5317ac;">in</span> ind]) * 1.0 / y_pred.size
 </pre>
 </div>
 </div>
@@ -716,26 +532,26 @@ manifolds)
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">import</span> seaborn <span style="color: #00c089; font-weight: bold;">as</span> sns
-<span style="color: #00c089; font-weight: bold;">import</span> pandas <span style="color: #00c089; font-weight: bold;">as</span> pd
+<pre class="src src-python"><span style="color: #5317ac;">import</span> seaborn <span style="color: #5317ac;">as</span> sns
+<span style="color: #5317ac;">import</span> pandas <span style="color: #5317ac;">as</span> pd
 
-<span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">plot</span>(x, y, plot_id, names=<span style="color: #37aff6;">None</span>):
+<span style="color: #5317ac;">def</span> <span style="color: #721045;">plot</span>(x, y, plot_id, names=<span style="color: #0000c0;">None</span>):
     viz_df = pd.DataFrame(data=x[:5000])
-    viz_df[<span style="color: #af9fff;">'Label'</span>] = y[:5000]
-    <span style="color: #00c089; font-weight: bold;">if</span> names <span style="color: #00c089; font-weight: bold;">is</span> <span style="color: #00c089; font-weight: bold;">not</span> <span style="color: #37aff6;">None</span>:
-        viz_df[<span style="color: #af9fff;">'Label'</span>] = viz_df[<span style="color: #af9fff;">'Label'</span>].<span style="color: #3fb83f; font-weight: bold;">map</span>(names)
+    viz_df[<span style="color: #2544bb;">'Label'</span>] = y[:5000]
+    <span style="color: #5317ac;">if</span> names <span style="color: #5317ac;">is</span> <span style="color: #5317ac;">not</span> <span style="color: #0000c0;">None</span>:
+        viz_df[<span style="color: #2544bb;">'Label'</span>] = viz_df[<span style="color: #2544bb;">'Label'</span>].<span style="color: #8f0075;">map</span>(names)
 
     plt.subplots(figsize=(8, 5))
     plt.title(plot_id)
     sns.scatterplot(x=0, y=1, 
-                    hue=<span style="color: #af9fff;">'Label'</span>, legend=<span style="color: #af9fff;">'full'</span>, 
-                    hue_order=<span style="color: #3fb83f; font-weight: bold;">sorted</span>(viz_df[<span style="color: #af9fff;">'Label'</span>].unique()),
-                    palette=sns.color_palette(<span style="color: #af9fff;">"hls"</span>, n_colors=10),
+                    hue=<span style="color: #2544bb;">'Label'</span>, legend=<span style="color: #2544bb;">'full'</span>, 
+                    hue_order=<span style="color: #8f0075;">sorted</span>(viz_df[<span style="color: #2544bb;">'Label'</span>].unique()),
+                    palette=sns.color_palette(<span style="color: #2544bb;">"hls"</span>, n_colors=10),
                     alpha=.5,
                     data=viz_df)
 
-    plt.ylabel(<span style="color: #af9fff;">""</span>)
-    plt.xlabel(<span style="color: #af9fff;">""</span>)
+    plt.ylabel(<span style="color: #2544bb;">""</span>)
+    plt.xlabel(<span style="color: #2544bb;">""</span>)
     plt.tight_layout()
     plt.show()
     plt.clf()
@@ -764,13 +580,13 @@ and initialize a list to contain our results
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">from</span> sklearn <span style="color: #00c089; font-weight: bold;">import</span> metrics
+<pre class="src src-python"><span style="color: #5317ac;">from</span> sklearn <span style="color: #5317ac;">import</span> metrics
 
-<span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">loading all the tests at once</span>
-<span style="color: #78afff;">test_loader</span> = torch.utils.data.DataLoader(
+<span style="color: #505050;"># </span><span style="color: #505050;">loading all the tests at once</span>
+<span style="color: #00538b;">test_loader</span> = torch.utils.data.DataLoader(
     test_data, 
     batch_size=10000, 
-    shuffle=<span style="color: #37aff6;">False</span>
+    shuffle=<span style="color: #0000c0;">False</span>
 )
 
 res = []
@@ -782,30 +598,30 @@ We can now try shallow clustering, and see how it performs
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">with</span> torch.no_grad():
-    <span style="color: #00c089; font-weight: bold;">for</span> x, y <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #78afff;">test_loader</span>:
+<pre class="src src-python"><span style="color: #5317ac;">with</span> torch.no_grad():
+    <span style="color: #5317ac;">for</span> x, y <span style="color: #5317ac;">in</span> <span style="color: #00538b;">test_loader</span>:
         x = x.view(-1, 784).cpu()
-        <span style="color: #78afff;">y</span> = np.asarray(y.numpy())
+        <span style="color: #00538b;">y</span> = np.asarray(y.numpy())
 
       gmm.fit(x)
-      <span style="color: #78afff;">y_pred_prob</span> = gmm.predict_proba(x)
-      <span style="color: #78afff;">y_pred</span> = y_pred_prob.argmax(1)
+      <span style="color: #00538b;">y_pred_prob</span> = gmm.predict_proba(x)
+      <span style="color: #00538b;">y_pred</span> = y_pred_prob.argmax(1)
 
-      <span style="color: #78afff;">y_pred</span> = np.asarray(y_pred)
+      <span style="color: #00538b;">y_pred</span> = np.asarray(y_pred)
 
-      <span style="color: #78afff;">acc</span> = np.<span style="color: #3fb83f; font-weight: bold;">round</span>(cluster_acc(y, y_pred), 5)
-      <span style="color: #78afff;">nmi</span> = np.<span style="color: #3fb83f; font-weight: bold;">round</span>(metrics.normalized_mutual_info_score(y, y_pred), 5)
-      <span style="color: #78afff;">ari</span> = np.<span style="color: #3fb83f; font-weight: bold;">round</span>(metrics.adjusted_rand_score(y, y_pred), 5)
+      <span style="color: #00538b;">acc</span> = np.<span style="color: #8f0075;">round</span>(cluster_acc(y, y_pred), 5)
+      <span style="color: #00538b;">nmi</span> = np.<span style="color: #8f0075;">round</span>(metrics.normalized_mutual_info_score(y, y_pred), 5)
+      <span style="color: #00538b;">ari</span> = np.<span style="color: #8f0075;">round</span>(metrics.adjusted_rand_score(y, y_pred), 5)
 
-      <span style="color: #78afff;">res</span> += [(<span style="color: #af9fff;">'GMM'</span>, acc, nmi, ari)]
+      <span style="color: #00538b;">res</span> += [(<span style="color: #2544bb;">'GMM'</span>, acc, nmi, ari)]
 
-      <span style="color: #78afff;">y_pred</span> = np.asarray(km.fit_predict(x))
+      <span style="color: #00538b;">y_pred</span> = np.asarray(km.fit_predict(x))
 
-      <span style="color: #78afff;">acc</span> = np.<span style="color: #3fb83f; font-weight: bold;">round</span>(cluster_acc(y, y_pred), 5)
-      <span style="color: #78afff;">nmi</span> = np.<span style="color: #3fb83f; font-weight: bold;">round</span>(metrics.normalized_mutual_info_score(y, y_pred), 5)
-      <span style="color: #78afff;">ari</span> = np.<span style="color: #3fb83f; font-weight: bold;">round</span>(metrics.adjusted_rand_score(y, y_pred), 5)
+      <span style="color: #00538b;">acc</span> = np.<span style="color: #8f0075;">round</span>(cluster_acc(y, y_pred), 5)
+      <span style="color: #00538b;">nmi</span> = np.<span style="color: #8f0075;">round</span>(metrics.normalized_mutual_info_score(y, y_pred), 5)
+      <span style="color: #00538b;">ari</span> = np.<span style="color: #8f0075;">round</span>(metrics.adjusted_rand_score(y, y_pred), 5)
 
-      <span style="color: #78afff;">res</span> += [(<span style="color: #af9fff;">'Km'</span>, acc, nmi, ari)]
+      <span style="color: #00538b;">res</span> += [(<span style="color: #2544bb;">'Km'</span>, acc, nmi, ari)]
 </pre>
 </div>
 
@@ -814,11 +630,11 @@ We'll define an utility function to print a pretty table with our
 results
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">print_res</span>(res):
-  <span style="color: #3fb83f; font-weight: bold;">format</span> = <span style="color: #af9fff;">"{:&lt;8} {:&lt;15} {:&lt;10} {:&lt;10}"</span>
-  <span style="color: #3fb83f; font-weight: bold;">print</span>(<span style="color: #3fb83f; font-weight: bold;">format</span>.<span style="color: #3fb83f; font-weight: bold;">format</span>(<span style="color: #af9fff;">"name"</span>, <span style="color: #af9fff;">"ACC"</span>, <span style="color: #af9fff;">"NMI"</span>, <span style="color: #af9fff;">"ARI"</span>))
-  <span style="color: #00c089; font-weight: bold;">for</span> name, acc, nmi, ari <span style="color: #00c089; font-weight: bold;">in</span> res:
-    <span style="color: #3fb83f; font-weight: bold;">print</span>(<span style="color: #3fb83f; font-weight: bold;">format</span>.<span style="color: #3fb83f; font-weight: bold;">format</span>(name, acc, nmi, ari))
+<pre class="src src-python"><span style="color: #5317ac;">def</span> <span style="color: #721045;">print_res</span>(res):
+  <span style="color: #8f0075;">format</span> = <span style="color: #2544bb;">"{:&lt;8} {:&lt;15} {:&lt;10} {:&lt;10}"</span>
+  <span style="color: #8f0075;">print</span>(<span style="color: #8f0075;">format</span>.<span style="color: #8f0075;">format</span>(<span style="color: #2544bb;">"name"</span>, <span style="color: #2544bb;">"ACC"</span>, <span style="color: #2544bb;">"NMI"</span>, <span style="color: #2544bb;">"ARI"</span>))
+  <span style="color: #5317ac;">for</span> name, acc, nmi, ari <span style="color: #5317ac;">in</span> res:
+    <span style="color: #8f0075;">print</span>(<span style="color: #8f0075;">format</span>.<span style="color: #8f0075;">format</span>(name, acc, nmi, ari))
 
 print_res(res)
 </pre>
@@ -852,32 +668,32 @@ rapresenting for each batch the accuracy and nmi)</li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">cluster_embedded</span>(manifold, name):
-  <span style="color: #78afff;">res</span> = []
-  <span style="color: #00c089; font-weight: bold;">with</span> torch.no_grad():
-    <span style="color: #00c089; font-weight: bold;">for</span> x, y <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #78afff;">test_loader</span>:
+<pre class="src src-python"><span style="color: #5317ac;">def</span> <span style="color: #721045;">cluster_embedded</span>(manifold, name):
+  <span style="color: #00538b;">res</span> = []
+  <span style="color: #5317ac;">with</span> torch.no_grad():
+    <span style="color: #5317ac;">for</span> x, y <span style="color: #5317ac;">in</span> <span style="color: #00538b;">test_loader</span>:
         x = x.view(-1, 784).to(device)
-        <span style="color: #78afff;">y</span> = np.asarray(y.numpy())
+        <span style="color: #00538b;">y</span> = np.asarray(y.numpy())
 
-        <span style="color: #78afff;">hl</span> = encoder(x)
+        <span style="color: #00538b;">hl</span> = encoder(x)
 
-        <span style="color: #78afff;">hle</span> = manifold.fit_transform(hl.cpu())
+        <span style="color: #00538b;">hle</span> = manifold.fit_transform(hl.cpu())
         gmm.fit(hle)
 
-        <span style="color: #78afff;">y_pred_prob</span> = gmm.predict_proba(hle)
-        <span style="color: #78afff;">y_pred</span> = y_pred_prob.argmax(1)
-        <span style="color: #78afff;">y_pred</span> = np.asarray(y_pred)
+        <span style="color: #00538b;">y_pred_prob</span> = gmm.predict_proba(hle)
+        <span style="color: #00538b;">y_pred</span> = y_pred_prob.argmax(1)
+        <span style="color: #00538b;">y_pred</span> = np.asarray(y_pred)
 
-        <span style="color: #78afff;">acc</span> = np.<span style="color: #3fb83f; font-weight: bold;">round</span>(cluster_acc(y, y_pred), 5)
-        <span style="color: #78afff;">nmi</span> = np.<span style="color: #3fb83f; font-weight: bold;">round</span>(metrics.normalized_mutual_info_score(y, y_pred), 5)
-        <span style="color: #78afff;">ari</span> = np.<span style="color: #3fb83f; font-weight: bold;">round</span>(metrics.adjusted_rand_score(y, y_pred), 5)
+        <span style="color: #00538b;">acc</span> = np.<span style="color: #8f0075;">round</span>(cluster_acc(y, y_pred), 5)
+        <span style="color: #00538b;">nmi</span> = np.<span style="color: #8f0075;">round</span>(metrics.normalized_mutual_info_score(y, y_pred), 5)
+        <span style="color: #00538b;">ari</span> = np.<span style="color: #8f0075;">round</span>(metrics.adjusted_rand_score(y, y_pred), 5)
 
-        plot(hle, y, f<span style="color: #af9fff;">"</span>{name}<span style="color: #af9fff;"> true labels"</span>)
-        <span style="color: #78afff;">best_fit</span>, <span style="color: #78afff;">_</span>, <span style="color: #78afff;">_</span> = best_cluster_fit(y, y_pred)
-        plot(hle, best_fit, f<span style="color: #af9fff;">"</span>{name}<span style="color: #af9fff;"> predicted labels"</span>)
+        plot(hle, y, f<span style="color: #2544bb;">"</span>{name}<span style="color: #2544bb;"> true labels"</span>)
+        <span style="color: #00538b;">best_fit</span>, <span style="color: #00538b;">_</span>, <span style="color: #00538b;">_</span> = best_cluster_fit(y, y_pred)
+        plot(hle, best_fit, f<span style="color: #2544bb;">"</span>{name}<span style="color: #2544bb;"> predicted labels"</span>)
 
-        <span style="color: #78afff;">res</span> += [(name, acc, nmi, ari)]
-  <span style="color: #00c089; font-weight: bold;">return</span> res
+        <span style="color: #00538b;">res</span> += [(name, acc, nmi, ari)]
+  <span style="color: #5317ac;">return</span> res
 </pre>
 </div>
 </div>
@@ -890,7 +706,7 @@ We'll apply <code>umap</code> to our encoded space and then cluster it with
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #78afff;">res</span> += cluster_embedded(umap_manifold, <span style="color: #af9fff;">'umap'</span>)
+<pre class="src src-python"><span style="color: #00538b;">res</span> += cluster_embedded(umap_manifold, <span style="color: #2544bb;">'umap'</span>)
 </pre>
 </div>
 </div>
@@ -904,7 +720,7 @@ We'll apply <code>t-SNE</code> to our encoded space and cluster it with
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #78afff;">res</span> += cluster_embedded(tsne_manifold, <span style="color: #af9fff;">'t-SNE'</span>)
+<pre class="src src-python"><span style="color: #00538b;">res</span> += cluster_embedded(tsne_manifold, <span style="color: #2544bb;">'t-SNE'</span>)
 </pre>
 </div>
 </div>
@@ -919,7 +735,7 @@ We'll apply <code>isomap</code> to our encoded space and cluster it with
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #78afff;">res</span> += cluster_embedded(isomap_manifold, <span style="color: #af9fff;">'isomap'</span>)
+<pre class="src src-python"><span style="color: #00538b;">res</span> += cluster_embedded(isomap_manifold, <span style="color: #2544bb;">'isomap'</span>)
 </pre>
 </div>
 </div>
@@ -953,7 +769,7 @@ is the best across the bord, outperforming t-SNE and isomap.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Luca Zaninotto</p>
-<p class="date">Created: 2023-02-08 Wed 22:37</p>
+<p class="date">Created: 2023-03-16 Thu 15:57</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

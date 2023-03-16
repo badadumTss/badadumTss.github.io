@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-02-23 Thu 22:29 -->
+<!-- 2023-03-16 Thu 15:57 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Minimum cut algorithms</title>
@@ -274,9 +274,9 @@ correct result with high probability with a complexity of
 </div>
 </div>
 
-<div id="outline-container-org9629ba7" class="outline-3">
-<h3 id="org9629ba7">Results</h3>
-<div class="outline-text-3" id="text-org9629ba7">
+<div id="outline-container-org34825d2" class="outline-3">
+<h3 id="org34825d2">Results</h3>
+<div class="outline-text-3" id="text-org34825d2">
 
 <div id="org4c9a0a3" class="figure">
 <p><img src="./imgs/Karger and Stein.png" alt="Karger and Stein.png">
@@ -338,9 +338,9 @@ for \(G\backslash\{s,t\}\) (The same graph as \(G\), where the nodes
 </p>
 </div>
 
-<div id="outline-container-org5f68456" class="outline-3">
-<h3 id="org5f68456">Results</h3>
-<div class="outline-text-3" id="text-org5f68456">
+<div id="outline-container-orgd8be1e1" class="outline-3">
+<h3 id="orgd8be1e1">Results</h3>
+<div class="outline-text-3" id="text-orgd8be1e1">
 <p>
 The complexity of this algorithm is
 </p>
@@ -358,7 +358,7 @@ is calculated again as
 \[\max \left( \frac{t}{mn\log(n)} \right)\]
 </p>
 
-<div id="orgdbef7a6" class="figure">
+<div id="orgebe7c0b" class="figure">
 <p><img src="./imgs/Stoer and Wagner.png" alt="Stoer and Wagner.png">
 </p>
 <p><span class="figure-number">Figure 2: </span>Stoer and Wagner run times against input size (nodes and edges)</p>
@@ -387,28 +387,28 @@ and Wagner is run on the contracted graph.
 To study the complexity we can take look at the hybrid procedure:
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">hybrid</span>(graph):
-    <span style="color: #78afff;">n</span> = graph.n_vertices
-    <span style="color: #b7a07f; font-style: italic;"># </span><span style="color: #b7a07f; font-style: italic;">t = O(long(n))</span>
-    <span style="color: #78afff;">t</span> = <span style="color: #3fb83f; font-weight: bold;">int</span>(np.ceil((n / (n-1)) * np.log(n))
+<pre class="src src-python"><span style="color: #5317ac;">def</span> <span style="color: #721045;">hybrid</span>(graph):
+    <span style="color: #00538b;">n</span> = graph.n_vertices
+    <span style="color: #505050;"># </span><span style="color: #505050;">t = O(long(n))</span>
+    <span style="color: #00538b;">t</span> = <span style="color: #8f0075;">int</span>(np.ceil((n / (n-1)) * np.log(n))
     amin = np.Inf
     d_time = 0
-    <span style="color: #00c089; font-weight: bold;">for</span> i <span style="color: #00c089; font-weight: bold;">in</span> <span style="color: #3fb83f; font-weight: bold;">range</span>(t):
+    <span style="color: #5317ac;">for</span> i <span style="color: #5317ac;">in</span> <span style="color: #8f0075;">range</span>(t):
         cut, d_time = hybrid_iteration(graph)
-        <span style="color: #00c089; font-weight: bold;">if</span> cut &lt; amin:
+        <span style="color: #5317ac;">if</span> cut &lt; amin:
             amin = cut
             d_time = perf_counter_ns()
-    <span style="color: #00c089; font-weight: bold;">return</span> amin, d_time
+    <span style="color: #5317ac;">return</span> amin, d_time
 </pre>
 </div>
 <p>
 where the hybrid iteration is described as
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #00c089; font-weight: bold;">def</span> <span style="color: #7fc500;">hybrid_iteration</span>(graph):
-    <span style="color: #78afff;">t</span> = np.ceil(graph.n_vertices / np.sqrt(2) + 1)
-    <span style="color: #78afff;">g</span> = contract(graph, t)
-    <span style="color: #00c089; font-weight: bold;">return</span> stoer_wagner(g)
+<pre class="src src-python"><span style="color: #5317ac;">def</span> <span style="color: #721045;">hybrid_iteration</span>(graph):
+    <span style="color: #00538b;">t</span> = np.ceil(graph.n_vertices / np.sqrt(2) + 1)
+    <span style="color: #00538b;">g</span> = contract(graph, t)
+    <span style="color: #5317ac;">return</span> stoer_wagner(g)
 </pre>
 </div>
 <p>
@@ -499,11 +499,11 @@ algorithm has complexity
 </div>
 
 
-<div id="outline-container-org34825d2" class="outline-3">
-<h3 id="org34825d2">Results</h3>
-<div class="outline-text-3" id="text-org34825d2">
+<div id="outline-container-org418dcfb" class="outline-3">
+<h3 id="org418dcfb">Results</h3>
+<div class="outline-text-3" id="text-org418dcfb">
 
-<div id="org402ebb1" class="figure">
+<div id="org4537123" class="figure">
 <p><img src="./imgs/Hybrid.png" alt="Hybrid.png">
 </p>
 <p><span class="figure-number">Figure 3: </span>Hybrid run times against input size (nodes and edges)</p>
@@ -534,7 +534,7 @@ have instead comparable complexities. By plotting the run time of
 each algorithm:
 </p>
 
-<div id="orge9a131b" class="figure">
+<div id="org32f2947" class="figure">
 <p><img src="./imgs/Runtime comp.png" alt="Runtime comp.png">
 </p>
 <p><span class="figure-number">Figure 4: </span>Runtime comparison between the three algorithms</p>
@@ -561,7 +561,7 @@ outperforms the two even from this point of view, showing how is a
 generally faster algorithm.
 </p>
 
-<div id="org1f3ee7e" class="figure">
+<div id="org0c4b38d" class="figure">
 <p><img src="./imgs/Discovery comp.png" alt="Discovery comp.png" width="500px">
 </p>
 <p><span class="figure-number">Figure 5: </span>Discovery time comparison between the three algorithms</p>
@@ -572,7 +572,7 @@ generally faster algorithm.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Luca Zaninotto</p>
-<p class="date">Created: 2023-02-23 Thu 22:29</p>
+<p class="date">Created: 2023-03-16 Thu 15:57</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
