@@ -11,6 +11,20 @@
     --link-visited: #008000;
 }
 
+@media (prefers-color-scheme: dark) {
+    :root {
+	--background: #2b2b2b;
+	--text: #fffffc;
+	--code: #eeeeee;
+	--todo: #d64550;
+	--done: #53917e;
+	--priority: #ebefbf;
+	--link-visited: #38b000;
+	--link: #38c000;
+    }
+}
+
+
 html {
     font-family: 'Space Grotesk', sans-serif;
     background-color: var(--background);
@@ -61,7 +75,7 @@ p.verse { margin-left: 3%; }
 pre {
     border: 1px solid #e6e6e6;
     border-radius: 3px;
-    background-color: #f2f2f2;
+    background-color: var(--background);
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -78,7 +92,7 @@ pre.src:before {
     right: 12px;
     padding: 3px;
     color: #555;
-    background-color: #f2f2f299;
+    background-color: var(--background);
 }
 pre.src:hover:before { display: inline; margin-top: 14px;}
 /* Languages per Org manual */
@@ -205,7 +219,7 @@ dt { font-weight: bold; }
 }
 .inlinetask {
     padding: 10px;
-    border: 2px solid gray;
+    border: 2px solid var(--code);
     margin: 10px;
     background: #ffffcc;
 }
@@ -218,5 +232,5 @@ textarea { overflow-x: auto; }
 #org-info-js_console-label
 { font-size: 10px; font-weight: bold; white-space: nowrap; }
 .org-info-js_search-highlight
-{ background-color: #ffff00; color: #000000; font-weight: bold; }
+{ background-color: #ffff00; color: var(--background); font-weight: bold; }
 .org-svg { }
