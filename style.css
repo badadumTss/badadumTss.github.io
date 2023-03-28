@@ -189,10 +189,17 @@ pre.src-nxml:before { content: 'XML'; }
      (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
 pre.src-conf:before { content: 'Configuration File'; }
 
-table { border-collapse:collapse; }
+table {
+    border-collapse:collapse;
+    border: 2px solid var(--text);
+}
 caption.t-above { caption-side: top; }
 caption.t-bottom { caption-side: bottom; }
-td, th { vertical-align:top;  }
+td, th {
+    vertical-align: top;
+    padding: 10px;
+    border: 1px solid var(--text);
+}
 th.org-right  { text-align: center;  }
 th.org-left   { text-align: center;   }
 th.org-center { text-align: center; }
