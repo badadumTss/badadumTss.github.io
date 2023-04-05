@@ -51,14 +51,20 @@ a:visited {
 #postamble {
     text-align: right;
 }
+
 img {
     display: block;
-    max-width: 50%;
+    max-width: 100%;
     vertical-align: middle;
     margin: 50px auto;
+}
+
+.card {
+    max-width: 50%;
     box-shadow: 0 4px 8px 0 var(--shadow), 0 6px 20px 0 var(--shadow);
     border-radius: 10px;
 }
+
 .title  { text-align: center;
           margin-bottom: .2em; }
 .subtitle { text-align: center;
