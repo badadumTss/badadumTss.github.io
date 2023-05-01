@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2023-05-01 Mon 14:14 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GR(1) Verification</title>
+<meta name="author" content="Luca Zaninotto -- 2057074" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="../style.css"/>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav><a id="navbar-home" href="../index.html">🏡 Home</a></nav>
+</div>
+<div id="content" class="content">
+<h1 class="title">GR(1) Verification</h1>
+<div id="outline-container-org318430d" class="outline-2">
+<h2 id="org318430d">General reactivity of rank 1</h2>
+<div class="outline-text-2" id="text-org318430d">
+<p>
+In temporal logic, general reactivity formulas of rank 1 are
+formulas in the shape
+</p>
+
+<p>
+\[(\square\diamondsuit f_1 \wedge \square\diamondsuit f_2 \wedge \dots \wedge
+  \square\diamondsuit f_n) \rightarrow (\square\diamondsuit g_1 \wedge
+  \square\diamondsuit g_2 \wedge \dots \wedge \square\diamondsuit g_n)\]
+</p>
+
+<p>
+In other words
+</p>
+
+<p>
+\[\left(\bigwedge_{i=1}^n\square\diamondsuit f_i\right) \rightarrow
+  \left(\bigwedge_{i=1}^n \square \diamondsuit g_i\right)\]
+</p>
+
+<p>
+To prove that a given model respects such specifications we can see
+it in another way, and verify weather the model does <i>not</i> satisfy
+</p>
+
+<p>
+\[\left(\bigwedge_{i=1}^n\square\diamondsuit f_i\right) \wedge
+  \left(\bigvee_{i=1}^n\diamondsuit\square (\neg g_i)\right)\]
+</p>
+
+<p>
+By seeing the problem this way we have a clearer way to implement an
+algorithm to find weather a given specification is satisfied or not,
+following the general scheme:
+</p>
+<ul class="org-ul">
+<li>find the loops respecting \(\square\diamondsuit f_1\), from that, find
+the loops respecting \(\square\diamondsuit f_2\), and so on, until you
+either found a loop satisfying \(\bigwedge_{i=1}^n\square\diamondsuit
+    f_i\) or an empty set.
+<ul class="org-ul">
+<li>If an empty set was found, the property is respected, the
+hypothesis is false.</li>
+</ul></li>
+<li>if not, for each \(i \in \{1,\dots,n\}\), starting from the loops
+respecting \(\bigwedge_{i=1}^n\square\diamondsuit f_i\) search for
+a loop respecting \(\diamondsuit\square \neg g_i\)
+<ul class="org-ul">
+<li>if any of such loop is found, return a counterexample</li>
+</ul></li>
+</ul>
+
+<p>
+Let's look at each individual step and its implementation to see how
+it works.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5ef99df" class="outline-2">
+<h2 id="org5ef99df">Loops respecting \(\square\diamondsuit f_n\)</h2>
+<div class="outline-text-2" id="text-org5ef99df">
+<p>
+To find each the loop respecting \(\square\diamondsuit f_n\) we use
+the algorithm for repeatability check we saw in class:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5317ac;">def</span> <span style="color: #721045;">GF</span>(spec, reach):
+    <span style="color: #2a486a;">"""check weather the model, in the `reach` subset verifies</span>
+<span style="color: #2a486a;">    G ( F (spec)).</span>
+<span style="color: #2a486a;">    If it does, it returns the set of frontiers calculated</span>
+<span style="color: #2a486a;">    """</span>
+
+    <span style="color: #00538b;">fsm</span> = pynusmv.glob.prop_database().master.bddFsm
+    <span style="color: #5317ac;">if</span> <span style="color: #5317ac;">not</span> <span style="color: #00538b;">reach</span>:
+        <span style="color: #5317ac;">return</span> <span style="color: #0000c0;">None</span>
+    recur = reach * spec
+    <span style="color: #5317ac;">while</span> (fsm.count_states(recur) != 0):
+        <span style="color: #00538b;">reach</span> = pynusmv.dd.BDD.false()
+        <span style="color: #00538b;">new</span> = fsm.pre(recur)
+        <span style="color: #00538b;">news</span> = [new, recur]
+        <span style="color: #5317ac;">while</span> (fsm.count_states(new) != 0):
+            <span style="color: #00538b;">reach</span> = reach + new 
+            <span style="color: #5317ac;">if</span> recur.entailed(reach):
+                <span style="color: #5317ac;">return</span> news
+            <span style="color: #00538b;">new</span> = (fsm.pre(new)) - reach
+            <span style="color: #00538b;">news</span> = [new] + news
+        <span style="color: #00538b;">recur</span> = recur * reach
+    <span style="color: #5317ac;">return</span> <span style="color: #0000c0;">None</span>
+</pre>
+</div>
+
+<p>
+The implementation works by constructing subsequent frontiers for
+which the pre-image eventually returns to some subset of the initial
+<code>recur</code> set. If at some point no such subset is found (the subset is
+the empty set) then there is no loop that satisfies
+\(\square\diamondsuit f_n\) starting from the <code>reach</code> subset,
+otherwise the explored frontiers are returns (from which we can
+build the set of loops).  To find the intersection of the two we
+have to search for loops that both respect \(\square\diamondsuit
+  f_n\) and \(\square\diamondsuit f_{n+1}\). In order to achieve this
+the simple intersection of the sets is not enough, we have to re-run
+the algorithm that checks \(\square\diamondsuit f_n\) on the loop
+set built starting from the frontiers of the last run, this way we
+find a new set of frontiers, contained in the first one that also
+respects the second one:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #00538b;">fsm</span> = pynusmv.glob.prop_database().master.bddFsm
+
+<span style="color: #505050;"># </span><span style="color: #505050;">find fs and gs from formula</span>
+<span style="color: #00538b;">fs</span>, <span style="color: #00538b;">gs</span> = parse_gr1(spec)
+
+<span style="color: #00538b;">loop_set_f</span> = reachability(fsm)
+<span style="color: #5317ac;">for</span> f <span style="color: #5317ac;">in</span> <span style="color: #00538b;">fs</span>:
+    bdd = spec_to_bdd(fsm, f)
+    <span style="color: #00538b;">fronts_f</span> = GF(bdd, loop_set_f)
+    <span style="color: #00538b;">loop_set_f</span> = loops(fronts_f)
+</pre>
+</div>
+<p>
+The first formula is checked in the reachable set (as usual), the
+second starting from the loop set of the first one, and so on, until
+all the formulas \(f\) are checked. Once this step is done either
+<code>loop_set_f</code> contains a valid loop set, which means that the
+hypothesis is <code>True</code>, therefore we have to check for the conclusion;
+or the set is empty, therefore the hypothesis is false and the
+formula is respected: we can simply return <code>(True, None)</code>.
+</p>
+
+<p>
+In order to execute this step we have to define the function
+<code>loops</code>, building the set of all loops starting from the explored
+frontiers (removing all the unwanted paths in the computation of
+\(\square\diamondsuit f_n\)):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5317ac;">def</span> <span style="color: #721045;">loops</span>(frontiers):
+    <span style="color: #2a486a;">"""Returns the /reach/ set build from the frontiers given as</span>
+<span style="color: #2a486a;">    input, this is useful in the forward phase to restrict more and</span>
+<span style="color: #2a486a;">    more the set /reach/ in the FG and GF algotihms</span>
+
+<span style="color: #2a486a;">    """</span>
+    <span style="color: #5317ac;">if</span> <span style="color: #5317ac;">not</span> <span style="color: #00538b;">frontiers</span>:
+        <span style="color: #5317ac;">return</span> <span style="color: #0000c0;">None</span>
+    fsm = pynusmv.glob.prop_database().master.bddFsm
+    <span style="color: #00538b;">frontiers</span> = <span style="color: #8f0075;">list</span>(<span style="color: #8f0075;">reversed</span>(frontiers))
+    <span style="color: #00538b;">reach</span> = frontiers[0]
+    <span style="color: #00538b;">new</span> = frontiers[0]
+    <span style="color: #5317ac;">for</span> el <span style="color: #5317ac;">in</span> <span style="color: #00538b;">frontiers</span>[1:]:
+        new = fsm.post(new) * el
+        <span style="color: #00538b;">new</span> = new - reach
+        <span style="color: #00538b;">reach</span> = reach + new
+    <span style="color: #5317ac;">return</span> reach
+</pre>
+</div>
+<p>
+Essentially since the frontiers are computed using the pre-image of
+sets, the loop set is built ``going forward'', using the post-image.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1b5c510" class="outline-2">
+<h2 id="org1b5c510">Loops respecting \(\diamondsuit\square g_n\)</h2>
+<div class="outline-text-2" id="text-org1b5c510">
+<p>
+If we arrived in this step, it means there are loops respecting
+\(\bigwedge_{i=1}^n\square\diamondsuit f_i\). Starting from these
+loops, we have to find some loop for which one of the \(g_i\)
+holds. Note that the starting point is <i>always</i> the loops respecting
+\(\bigwedge_{i=1}^n\square\diamondsuit f_i\), if some loop
+respecting \(\diamond\square g_i\) for some \(i\in \{0,\dots,n\}\),
+this means that the formula is not respected: returning the
+intermediate exploration frontiers helps us build the
+counterexample.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5317ac;">def</span> <span style="color: #721045;">FG</span>(spec, reach, recur):
+    <span style="color: #2a486a;">"""Check weather the model, in the `reach` subset verifies</span>
+<span style="color: #2a486a;">    F ( G(spec))</span>
+<span style="color: #2a486a;">    If it does, it returns the set of frontiers calculated</span>
+<span style="color: #2a486a;">    """</span>
+
+    <span style="color: #00538b;">fsm</span> = pynusmv.glob.prop_database().master.bddFsm
+    <span style="color: #505050;"># </span><span style="color: #505050;">reach = reachability(fsm)</span>
+    <span style="color: #5317ac;">if</span> <span style="color: #5317ac;">not</span> <span style="color: #00538b;">reach</span>:
+        <span style="color: #5317ac;">return</span> <span style="color: #0000c0;">None</span>
+    recur = recur * spec
+    <span style="color: #5317ac;">while</span> (fsm.count_states(recur) != 0):
+        <span style="color: #00538b;">reach</span> = pynusmv.dd.BDD.false()
+        <span style="color: #00538b;">new</span> = fsm.pre(recur) * spec
+        <span style="color: #00538b;">news</span> = [new, recur]
+        <span style="color: #5317ac;">while</span> (fsm.count_states(new) != 0):
+            <span style="color: #00538b;">reach</span> = reach + new 
+            <span style="color: #5317ac;">if</span> recur.entailed(reach): <span style="color: #505050;"># </span><span style="color: #505050;">recur == reach</span>
+                <span style="color: #5317ac;">return</span> news
+            new = (fsm.pre(new) * spec) - reach
+            news = [new] + news
+        recur = recur * reach
+    <span style="color: #5317ac;">return</span> <span style="color: #0000c0;">None</span>
+</pre>
+</div>
+
+<p>
+We can notice it is essentially the same algorithm to check
+\(\square\diamondsuit \varphi\), but in this case each frontier is
+calculated also intersecting with the property we're checking.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6551bd3" class="outline-2">
+<h2 id="org6551bd3">Building the counterexample</h2>
+<div class="outline-text-2" id="text-org6551bd3">
+<p>
+If the latter step results in something different from an empty set,
+it means that exists some loop that satisfies \[\exists j \mid
+  \bigwedge_{i=1}^n f_i \wedge \neg g_j\] This means we can build a
+witness for the falsehood of the initial implication
+\[\bigwedge_{i=1}^n f_i \to \bigwedge_{i=1}^n g_i\] Starting from
+the frontiers returned by the <code>FG</code> algorithm we can output a loop
+with a variation of the algorithm seen in class:
+</p>
+
+<ol class="org-ol">
+<li>compute <code>recur</code> and <code>reach</code> from the frontiers set, pick one state
+in <code>recur</code>, will be our first guess for the initial loop state
+<code>s</code>.</li>
+<li>compute subsequent frontiers of new states based on the
+post-image of the latter one (starting from <code>s</code>), until there are
+no states in the last frontier, keeping track of all the union of
+all new frontiers <code>r</code>.
+<ul class="org-ul">
+<li>If <code>s</code> is not inside <code>r</code> pick another state in the intersection
+between <code>r</code> and <code>reach</code>, repeat step 2.</li>
+</ul></li>
+<li>build the loop based on the frontiers, starting from <code>s</code>:
+<ul class="org-ul">
+<li>compute the pre-image of the currently considered node,
+intersect it with the frontier built on the post-image (call
+<code>pred</code> the intersection)</li>
+<li>select one node in the <code>pred</code> set</li>
+<li>expand the loop with the new node</li>
+<li>repeat for all frontiers</li>
+</ul></li>
+</ol>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5317ac;">def</span> <span style="color: #721045;">counterexample</span>(frontiers):
+    <span style="color: #2a486a;">"""Given a list of frontiers of the FG algorithm, build</span>
+<span style="color: #2a486a;">    a lasso-shaped execution that starts from the model initial states</span>
+<span style="color: #2a486a;">    and loops over the states given by the frontiers</span>
+
+<span style="color: #2a486a;">    """</span>
+    <span style="color: #00538b;">fsm</span> = pynusmv.glob.prop_database().master.bddFsm
+    <span style="color: #00538b;">recur</span> = frontiers[-1]
+    <span style="color: #00538b;">frontiers</span> = frontiers[:-1]
+    <span style="color: #00538b;">reach</span> = <span style="color: #8f0075;">reduce</span>(<span style="color: #5317ac;">lambda</span> x,acc: x+acc, frontiers)
+    <span style="color: #00538b;">s</span> = fsm.pick_one_state(recur)
+    <span style="color: #5317ac;">while</span> <span style="color: #0000c0;">True</span>:
+        r = pynusmv.dd.BDD.false()
+        <span style="color: #00538b;">new</span> = fsm.post(s) * reach
+        <span style="color: #00538b;">r_front</span> = [new]
+        <span style="color: #5317ac;">while</span> <span style="color: #5317ac;">not</span> fsm.count_states(new) == 0:
+            <span style="color: #00538b;">r</span> = r + new
+            <span style="color: #00538b;">new</span> = (fsm.post(new) * reach) - r
+            <span style="color: #00538b;">r_front</span> = r_front + [new]
+        <span style="color: #00538b;">r</span> = r * reach
+        <span style="color: #5317ac;">if</span> s.entailed(r):
+            <span style="color: #00538b;">i</span> = 0
+            <span style="color: #5317ac;">for</span> front <span style="color: #5317ac;">in</span> <span style="color: #00538b;">r_front</span>:
+                <span style="color: #5317ac;">if</span> s.entailed(front):
+                    <span style="color: #5317ac;">break</span>
+                i += 1
+            <span style="color: #00538b;">head</span> = head_to(s)[:-1] <span style="color: #505050;"># </span><span style="color: #505050;">forward [init ... s]</span>
+            <span style="color: #505050;"># </span><span style="color: #505050;">build the loop, in a /reverse/ order (with the pre-image)</span>
+            <span style="color: #00538b;">loop</span> = [s]
+            <span style="color: #00538b;">curr</span> = s
+            <span style="color: #5317ac;">for</span> new <span style="color: #5317ac;">in</span> <span style="color: #8f0075;">reversed</span>(<span style="color: #8f0075;">range</span>(i)):
+                <span style="color: #00538b;">pred</span> = fsm.pre(curr) * r_front[new]
+                <span style="color: #00538b;">curr</span> = fsm.pick_one_state(pred)
+                <span style="color: #00538b;">loop</span> = loop + [curr]
+            <span style="color: #00538b;">loop</span> = loop + [s]
+            <span style="color: #505050;"># </span><span style="color: #505050;">head = [init ... ], loop = [s ... s] // reversed</span>
+            <span style="color: #00538b;">path</span> = head + <span style="color: #8f0075;">list</span>(<span style="color: #8f0075;">reversed</span>(loop))
+            <span style="color: #5317ac;">return</span> path
+        <span style="color: #5317ac;">else</span>:
+            s = fsm.pick_one_state(r)
+</pre>
+</div>
+
+<p>
+Essentially working like the algorithm shown in class, with the only
+exception that it is initially reconstructing the recur and reach
+sets from the frontiers. It also returns the whole lasso-shaped
+execution, starting from an initial node and leading to the loop. We
+can do this because the frontiers built by the <code>FG</code> algorithm ensure
+that all the loops inside the <code>reach</code> set respect \(\square \neg
+  g_i\) for some \(i \in \{i,\dots,n\}\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb37894d" class="outline-2">
+<h2 id="orgb37894d">On the implementation</h2>
+<div class="outline-text-2" id="text-orgb37894d">
+<p>
+The implementation uses in some parts of the code the <code>functools</code>
+package. It should be included with the latest releases of python,
+but in case it is not, the user can install it with:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">pip install functools
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Luca Zaninotto &#x2013; 2057074</p>
+<p class="date">Created: 2023-05-01 Mon 14:14</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
