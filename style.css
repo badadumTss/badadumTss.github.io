@@ -31,7 +31,7 @@ html {
     font-family: 'Space Grotesk', sans-serif;
     background-color: var(--background);
     color: var(--text);
-    font-size: 110%;
+    font-size: 120%;
 }
 
 code {
@@ -64,6 +64,14 @@ img {
     box-shadow: 0 4px 8px 0 var(--shadow), 0 6px 20px 0 var(--shadow);
     border-radius: 10px;
 }
+
+/* .tex-table { */
+/*     border: 0; */
+/* } */
+
+/* .tex-table > * { */
+/*     border: 0; */
+/* } */
 
 .title  { text-align: center;
           margin-bottom: .2em; }
@@ -203,15 +211,22 @@ pre.src-conf:before { content: 'Configuration File'; }
 
 table {
     border-collapse:collapse;
-    border: 2px solid var(--text);
     margin: 50px auto;
 }
+
+.borders {
+    border: 2px solid var(--text);
+}
+
+.borders td {
+    border: 1px solid var(--text);
+}
+
 caption.t-above { caption-side: top; }
 caption.t-bottom { caption-side: bottom; }
 td, th {
     vertical-align: top;
     padding: 10px;
-    border: 1px solid var(--text);
 }
 th.org-right  { text-align: center;  }
 th.org-left   { text-align: center;   }

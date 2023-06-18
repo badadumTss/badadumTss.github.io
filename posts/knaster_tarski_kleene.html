@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2023-06-18 Sun 12:08 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Knaster Tarski Kleene for complete lattices</title>
+<meta name="author" content="Luca Zaninotto" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="../style.css"/>
+<div style="display: none"> \(
+\newcommand{\xr}[1]{\xrightarrow{#1}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\llb}{[\![}
+\newcommand{\rrb}{]\!]}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+\newcommand{\md}{\; . \;}
+\newcommand{\td}{\; : \;}
+\newcommand{\sqsb}{\sqsubseteq}
+\newcommand{\lub}{\text{lub}}
+\newcommand{\lfp}{\text{lfp}}
+\newcommand{\glb}{\text{glb}}
+\newcommand{\gfp}{\text{gfp}}
+\newcommand{\fp}{f_{\varphi, X}^\eta}
+\newcommand{\fpof}[3]{f_{ #1 , #2}^{ #3 }}
+\newcommand{\fpp}{f_{\varphi'}}
+\newcommand{\sem}{\llb\varphi\rrb_\eta}
+\newcommand{\semof}[4]{\llb #1 \rrb_{ #2 , #3 }^{ #4 }}
+\newcommand{\semc}{\llb\varphi^c\rrb_\eta}
+\newcommand{\semOne}{\llb\varphi_1(X)\rrb_{\eta[X\rightarrow S]}}
+\newcommand{\semTwo}{\llb\varphi_2(X)\rrb_{\eta[X\rightarrow S]}}
+\newcommand{\semOnec}{\llb(\varphi_1(X^c))^c\rrb_{\eta[X\rightarrow S]}}
+\newcommand{\semTwoc}{\llb(\varphi_2(X^c))^c\rrb_{\eta[X\rightarrow S]}}
+\newcommand{\semm}{\llb\varphi\rrb_{\eta[X\to S]}}
+\newcommand{\semmc}{\llb\varphi^c\rrb_{\eta[X\to S]}}
+\newcommand{\exs}{{\eta[X\rightarrow S]}}
+\newcommand{\exf}{{\eta[X\rightarrow \lfp(\fp)]}}
+\newcommand{\exF}{{\eta[X\rightarrow \gfp(\fpp)]}}
+\newcommand{\sqact}{\left[\text{Act}\right]}
+\newcommand{\anact}{\left<\text{Act}\right>}
+\newcommand{\procs}{\text{Proc}}
+\newcommand{\pprocs}{2^\procs}
+\newtheorem{lemma}{Lemma}
+\let\emptyset\varnothing
+\)</div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav><a id="navbar-home" href="../index.html">🏡 Home</a></nav>
+</div>
+<div id="content" class="content">
+<h1 class="title">Knaster Tarski Kleene for complete lattices</h1>
+
+<div id="outline-container-org16ac562" class="outline-2">
+<h2 id="org16ac562">Knaster Tarski Kleene</h2>
+<div class="outline-text-2" id="text-org16ac562">
+<p>
+Knaster-Tarski-Kleene theorem (for complete lattices) states that
+given a complete lattice with an order mesure \(\langle L,
+  \sqsubseteq\rangle\) and a monotone function \(f \; : \; L \to L
+  \mid x \sqsubseteq y \Rightarrow f(x) \sqsubseteq f(y)\) the set of
+fixpoints \(\{x \in L \mid f(x) = x\}\) is a complete lattice.
+</p>
+</div>
+</div>
+<div id="outline-container-orgfa0e607" class="outline-2">
+<h2 id="orgfa0e607">Proof</h2>
+<div class="outline-text-2" id="text-orgfa0e607">
+<p>
+Given a complete lattice \((L, \sqsb)\) and a monotone function over
+it
+</p>
+<div class="org-center">
+<p>
+\(f \td L \rightarrow L\)
+</p>
+
+<p>
+\(x \sqsb y \Rightarrow f \; x \sqsb f \; y\)
+</p>
+</div>
+<p>
+we'll call <i>pre</i> the set of pre-fixpoints \(\{x \mid f \; x \sqsb
+  x\}\) and <i>post</i> the set of post-fixpoints \(\{x \mid x \sqsb f \;
+  x\}\).  We'll prove that
+</p>
+<ol class="org-ol">
+<li>the least fixpoint and the glb of <i>pre</i> exist and they are
+identical</li>
+<li>the greatest fixpoint and the lub of <i>post</i> exists and they are
+the same</li>
+<li>the set of fixpoints of \(f\) build a complete lattice.</li>
+</ol>
+
+
+<dl class="org-dl">
+<dt>\(\lfp\) and glb(<i>pre</i>) exists</dt><dd><p>
+and they are identical
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">pre = \(\{x \mid f(x) \sqsb x\} \subseteq L\)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(\exists \glb(pre) = p\)</td>
+<td class="org-left">(bc pre \(\subseteq L\))</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(p \sqsb x \quad \forall x \in \) pre</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(p \sqsb x \Rightarrow f(p) \sqsb f(x)\)</td>
+<td class="org-left">By monotonicity</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(f(p) \sqsb f(x) \sqsb x\)</td>
+<td class="org-left">Since \(x \in\) pre</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This means that \(f(p)\) is a lower bound of pre. Since \(p\) is
+the greatest lower bound it holds that 
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">(1)</td>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(f(p) \sqsb p\)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(f(f(p)) \sqsb f(p)\)</td>
+<td class="org-left">By monotonicity</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(f(p) \in \) pre</td>
+<td class="org-left">by definition of pre</td>
+</tr>
+
+<tr>
+<td class="org-left">(2)</td>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(p \sqsb f(p)\)</td>
+<td class="org-left">by definition of pre</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(p = f(p)\)</td>
+<td class="org-left">because of (1) and (2)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+In order to conclude, we just need to observe that \(\forall x \)
+s.t. \(x\) is fixpoint \(f \; x \sqsb x\) (if \(x\) is fixpoint, it is
+also a pre-fixpoint), therefore, since \(p\) is a the glb of <i>pre</i>
+\(\Rightarrow p\) is the glb of the fixpoints: \(p\) is the least
+fixpoint.
+</p></dd>
+<dt>gfp and \(\lub\)(<i>post</i>) exists</dt><dd><p>
+and they are identical
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">post = \(\{x \mid x \sqsb f(x)\} \subseteq L\)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(\exists \lub(post) = p\)</td>
+<td class="org-left">(bc post \(\subseteq L\))</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(x \sqsb p \quad \forall x \in \) post</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(x \sqsb p \Rightarrow f(x) \sqsb f(p)\)</td>
+<td class="org-left">By monotonicity</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(x \sqsb f(x) \sqsb f(p)\)</td>
+<td class="org-left">Since \(x \in\) post</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This means that \(f(p)\) is an upper bound of post. Since \(p\) is
+the least upper bound, it holds that
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">(1)</td>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(p\sqsb f(p)\)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(f(p) \sqsb f(f(p))\)</td>
+<td class="org-left">By monotonicity</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(f(p) \in \) post</td>
+<td class="org-left">by definition of post</td>
+</tr>
+
+<tr>
+<td class="org-left">(2)</td>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(f(p) \sqsb p\)</td>
+<td class="org-left">by definition of post</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(p = f(p)\)</td>
+<td class="org-left">because of (1) and (2)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+In order to conclude, we just need to observe that \(\forall x \)
+s.t. \(x\) is fixpoint \(x \sqsb f(x)\) (if \(x\) is fixpoint, it is
+also a post-fixpoint), therefore, since \(p\) is a the lub of
+<i>post</i> \(\Rightarrow p\) is the lub of the fixpoints: \(p\) is the
+greatest fixpoint.
+</p></dd>
+<dt>\((\{x \mid f \; x = x\}, \sqsb)\)</dt><dd>is a complete lattice: To
+prove this we must show that each subset has a supremum and
+infimum that are fixpoints.
+<dl class="org-dl">
+<dt>Supremum:</dt><dd>Consider \[W \subseteq fix \quad
+      \text{a subset of fixpoints}\] Since it is a subset of the
+original complete lattice \(L\) it exists \[q = \lub(W) \in L\]
+what we must now show is that \(W\) has a supremum that is a
+fixpoint (e.g. each subset of \(fix\) has a supremum in \(fix\),
+therefore \(fix\) is a complete lattice). Consider now \[\hat{W} =
+      \{x \mid q \sqsb x \quad x \in L\}\] by definition we can say
+\[q \in \hat{W}, \quad q = \glb(\hat{W})\]
+<ol class="org-ol">
+<li><p>
+\(\hat{W}\) is a complete lattice:
+</p>
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\(q = \glb(\hat{W}) \in \hat{W}\)</td>
+<td class="org-left">by hypothesis</td>
+</tr>
+
+<tr>
+<td class="org-left">(1)</td>
+<td class="org-left">\(q \sqsb \lub(\hat{W})\)</td>
+<td class="org-left">by definition of \(\hat{W}\) and \(\lub\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(\lub(\hat{W}) \in \hat{W}\)</td>
+<td class="org-left">because of (1)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(\hat{W}\) is a complete lattice</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>
+\(\hat{W}\) is closed under a generic monotone function:
+</p>
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\(w\sqsb q \quad q\sqsb x\)</td>
+<td class="org-left">\(\forall w\in W, x \in \hat{W}\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(f(w) \sqsb f(q) \sqsb f(x)\)</td>
+<td class="org-left">by monotonicity</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(w\sqsb f(x)\)</td>
+<td class="org-left">\(\forall w\in W, x \in \hat{W}\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Which means that \(f(x)\) is an upper bound on \(W\), but this
+means \[q = \lub(W) \Rightarrow q \sqsb f(x)\] which again
+means \[f(x) \in \hat{W}\] by definition of \(\hat{W}\)
+</p></li>
+</ol></dd>
+</dl></dd>
+</dl>
+
+
+<p>
+\(f\) is monotonic over a complete lattice, which means:
+</p>
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(\exists \; \lfp(f) = \hat{q} \in \hat{W}\)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(q \sqsb \hat{q}\)</td>
+<td class="org-left">by definition of \(\hat{W}\)</td>
+</tr>
+</tbody>
+</table>
+<p>
+\(\hat{q}\) is a fixpoint greater than every element of the subset
+\(W \subseteq fix\)
+</p>
+<div class="org-center">
+<p>
+\(\hat{q}\) is supremum of \(W\)
+</p>
+</div>
+
+<dl class="org-dl">
+<dt>Infimum:</dt><dd>Consider \[W \subseteq fix \quad \text{a subset of
+    fixpoints}\] Since it is a subset of the original complete
+lattice \(L\) it exists \[q = \glb(W) \in L\] what we must now
+show is that \(W\) has an infimum that is a fixpoint (e.g. each
+subset of \(fix\) has a supremum in \(fix\), therefore \(fix\)
+is a complete lattice). Consider now \[\hat{W} = \{x \mid x
+    \sqsb q \quad x \in L\}\] by definition we can say \[q \in
+    \hat{W}, \quad q = \lub(\hat{W})\]
+<ol class="org-ol">
+<li><p>
+\(\hat{W}\) is a complete lattice:
+</p>
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\(q = \glb(\hat{W}) \in \hat{W}\)</td>
+<td class="org-left">by hypothesis</td>
+</tr>
+
+<tr>
+<td class="org-left">(1)</td>
+<td class="org-left">\(\glb(\hat{W}) \sqsb p\)</td>
+<td class="org-left">by definition of \(\hat{W}\) and \(\glb\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(\glb(\hat{W}) \in \hat{W}\)</td>
+<td class="org-left">because of (1)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(\hat{W}\) is a complete lattice</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>
+\(\hat{W}\) is closed under a generic monotone function:
+</p>
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\(x\sqsb q \quad q\sqsb w\)</td>
+<td class="org-left">\(\forall w\in W, x \in \hat{W}\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(f(x) \sqsb f(q) \sqsb f(w)\)</td>
+<td class="org-left">by monotonicity</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(f(x) \sqsb w\)</td>
+<td class="org-left">\(\forall w\in W, x \in \hat{W}\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Which means that \(f(x)\) is an upper bound on \(W\), but this
+means \[q = \glb(W) \Rightarrow q \sqsb f(x)\] which again
+means \[f(x) \in \hat{W}\] by definition of \(\hat{W}\)
+</p></li>
+</ol></dd>
+</dl>
+
+
+<p>
+\(f\) is monotonic over a complete lattice, which means:
+</p>
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(\exists \; \lfp(f) = \hat{q} \in \hat{W}\)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\Rightarrow\)</td>
+<td class="org-left">\(q \sqsb \hat{q}\)</td>
+<td class="org-left">by definition of \(\hat{W}\)</td>
+</tr>
+</tbody>
+</table>
+<p>
+\(\hat{q}\) is a fixpoint greater than every element of the subset
+\(W \subseteq fix\)
+</p>
+<div class="org-center">
+<p>
+\(\hat{q}\) is infimum of \(W\)
+</p>
+</div>
+</div>
+
+<div id="outline-container-org203870f" class="outline-3">
+<h3 id="org203870f">The superemum (or dually infinimum) of a subset \(W\) of fix is not necessarely in fix</h3>
+<div class="outline-text-3" id="text-org203870f">
+<p>
+As counterexample consider the complete
+lattice \[\langle \wp(\{a,b,c\}), \subseteq \rangle \quad
+   \text{and the function} \quad f(x) = \begin{cases} x & |x| \leq 1
+   \\ \{a,b,c\} & \text{otherwise}\end{cases}\]
+</p>
+
+<p>
+Whose hasse diagram is
+</p>
+
+
+<div id="org6f694c4" class="figure">
+<p><img src="./imgs/lattice.png" alt="lattice.png">
+</p>
+</div>
+
+<p>
+The function is clearly monotonic: if we consider \(x\subseteq y\)
+and we explore the cases:
+</p>
+<ul class="org-ul">
+<li>\(|x| \leq 1 \; |y| \leq 1 \Rightarrow f(x) \subseteq f(y)\) by
+definition</li>
+<li>\(|x| \leq 1 \; |y| > 1 \Rightarrow f(x) \subseteq \{a,b,c\}\)
+by definition</li>
+<li>\(|x| > 1 \; |y| > 1 \Rightarrow \{a,b,c\} \subseteq \{a,b,c\}\)
+by definition</li>
+</ul>
+
+
+<p>
+the set of fixpoints becomes \[\{\{a,b,c\}, \{a\}, \{b\}, \{c\},
+   \emptyset\}\] And if we consider the subset \(\{a\}, \{b\}\) we
+have that the supremum in the original lattice is \(\{a,b\} \not\in
+   \text{fix}\), but instead \(\{a,b,c\} \in \text{fix}\).
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Luca Zaninotto</p>
+<p class="date">Created: 2023-06-18 Sun 12:08</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
