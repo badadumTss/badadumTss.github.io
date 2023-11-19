@@ -67,14 +67,6 @@ img {
     border-radius: 10px;
 }
 
-/* .tex-table { */
-/*     border: 0; */
-/* } */
-
-/* .tex-table > * { */
-/*     border: 0; */
-/* } */
-
 .title  { text-align: center;
           margin-bottom: .2em; }
 .subtitle { text-align: center;
@@ -84,7 +76,7 @@ img {
 .todo   { font-family: monospace; color: var(--todo); }
 .done   { font-family: monospace; color: var(--done); }
 .priority { font-family: monospace; color: var(--priority); }
-.tag    { background-color: #eee; font-family: monospace;
+.tag    { background-color: var(--tag-bg); font-family: monospace;
           padding: 2px; font-size: 80%; font-weight: normal; }
 .timestamp { color: #bebebe; }
 .timestamp-kwd { color: #5f9ea0; }
