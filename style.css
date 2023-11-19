@@ -10,6 +10,7 @@
     --priority: #ebefbf;
     --link: #38b000;
     --link-visited: #008000;
+    --tag-bg: #eee;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,6 +24,7 @@
 	--priority: #ebefbf;
 	--link-visited: #38b000;
 	--link: #38c000;
+	--tag-bg: #111;
     }
 }
 
