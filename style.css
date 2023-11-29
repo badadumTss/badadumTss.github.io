@@ -5,6 +5,7 @@
     --text: #2b2b2b;
     --shadow: #5f5f5f;
     --code: #2e2e2e;
+    --code-bg: #eeeeee;
     --todo: #d64550;
     --done: #53917e;
     --priority: #ebefbf;
@@ -19,6 +20,7 @@
 	--text: #fffffc;
 	--shadow: #5f5f5f;
 	--code: #eeeeee;
+	--code-bg: #2e2e2e;
 	--todo: #d64550;
 	--done: #53917e;
 	--priority: #ebefbf;
@@ -39,6 +41,7 @@ html {
 code {
     color: var(--code);
     font-family: 'Space Mono', monospace;
+    background: var(--code-bg);
 }
 
 a {
