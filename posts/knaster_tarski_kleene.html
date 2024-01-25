@@ -1,43 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-07-09 dom 13:40 -->
+<!-- 2024-01-25 Thu 11:39 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Knaster Tarski Kleene for complete lattices</title>
 <meta name="author" content="Luca Zaninotto" />
 <meta name="generator" content="Org Mode" />
 <link rel="stylesheet" type="text/css" href="../style.css"/>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
-</head>
-<body>
-<div id="preamble" class="status">
-<nav><a id="navbar-home" href="../index.html">🏡 Home</a></nav>
-</div>
-<div id="content" class="content">
-<h1 class="title">Knaster Tarski Kleene for complete lattices</h1>
-<div class="org-src-container">
-<pre class="src src-latex-macros">\newcommand{\xr}[1]{\xrightarrow{#1}}
+<div style="display: none"> \(
+\newcommand{\xr}[1]{\xrightarrow{#1}}
 \newcommand{\B}{\mathcal{B}}
 \newcommand{\llb}{[\![}
 \newcommand{\rrb}{]\!]}
@@ -66,16 +38,55 @@
 \newcommand{\exf}{{\eta[X\rightarrow \lfp(\fp)]}}
 \newcommand{\exF}{{\eta[X\rightarrow \gfp(\fpp)]}}
 \newcommand{\sqact}{\left[\text{Act}\right]}
-\newcommand{\anact}{\left&lt;\text{Act}\right&gt;}
+\newcommand{\anact}{\left<\text{Act}\right>}
 \newcommand{\procs}{\text{Proc}}
 \newcommand{\pprocs}{2^\procs}
 \newtheorem{lemma}{Lemma}
 \let\emptyset\varnothing
-</pre>
+\)</div>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav><a id="navbar-home" href="../index.html">🏡 Home</a></nav>
 </div>
-<div id="outline-container-org3ae921f" class="outline-2">
-<h2 id="org3ae921f">Knaster Tarski Kleene</h2>
-<div class="outline-text-2" id="text-org3ae921f">
+<div id="content" class="content">
+<h1 class="title">Knaster Tarski Kleene for complete lattices</h1>
+
+<div id="outline-container-org2aaec42" class="outline-2">
+<h2 id="org2aaec42">Knaster Tarski Kleene</h2>
+<div class="outline-text-2" id="text-org2aaec42">
 <p>
 Knaster-Tarski-Kleene theorem (for complete lattices) states that
 given a complete lattice with an order mesure \(\langle L,
@@ -85,9 +96,9 @@ fixpoints \(\{x \in L \mid f(x) = x\}\) is a complete lattice.
 </p>
 </div>
 </div>
-<div id="outline-container-org8d6ba72" class="outline-2">
-<h2 id="org8d6ba72">Proof</h2>
-<div class="outline-text-2" id="text-org8d6ba72">
+<div id="outline-container-org68fcad6" class="outline-2">
+<h2 id="org68fcad6">Proof</h2>
+<div class="outline-text-2" id="text-org68fcad6">
 <p>
 Given a complete lattice \((L, \sqsb)\) and a monotone function over
 it
@@ -597,9 +608,9 @@ means \[f(x) \in \hat{W}\] by definition of \(\hat{W}\)
 </div>
 </div>
 
-<div id="outline-container-org460e4fd" class="outline-3">
-<h3 id="org460e4fd">The superemum (or dually infinimum) of a subset \(W\) of fix is not necessarely in fix</h3>
-<div class="outline-text-3" id="text-org460e4fd">
+<div id="outline-container-org15647c6" class="outline-3">
+<h3 id="org15647c6">The superemum (or dually infinimum) of a subset \(W\) of fix is not necessarely in fix</h3>
+<div class="outline-text-3" id="text-org15647c6">
 <p>
 As counterexample consider the complete
 lattice \[\langle \wp(\{a,b,c\}), \subseteq \rangle \quad
@@ -612,7 +623,7 @@ Whose hasse diagram is
 </p>
 
 
-<div id="org2cd99d8" class="figure">
+<div id="org2e13c96" class="figure">
 <p><img src="./imgs/lattice.png" alt="lattice.png">
 </p>
 </div>
@@ -643,7 +654,7 @@ have that the supremum in the original lattice is \(\{a,b\} \not\in
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Luca Zaninotto</p>
-<p class="date">Created: 2023-07-09 dom 13:40</p>
+<p class="date">Created: 2024-01-25 Thu 11:39</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
