@@ -1,37 +1,17 @@
 .timeline {
-    border-left: 2px solid var(--primary-2);
-    border-top: 2px solid var(--primary-2);
+    border-left: 2px solid var(--accent-main);
+    border-top: 2px solid var(--accent-main);
     padding: 0;
-    margin-bottom: 30px;
 }
 
 .timeline h2 {
-    background-color: var(--primary-3);
+    background-color: var(--accent-low);
     margin: 0;
-    padding: 0 10px;
+    padding-left: 10px;
 }
 
 .step {
     display: flex;
     gap: 30px;
     margin-left: 30px;
-    margin-bottom: 20px;
-}
-
-.step h3 {
-    width: 10em;
-}
-
-.step div {
-    max-width: 35em;
-}
-
-.step ul {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 1em;
-}
-
-.step li + li {
-    margin-top: 10px;
 }
