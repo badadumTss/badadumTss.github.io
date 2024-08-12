@@ -284,7 +284,10 @@ dt { font-weight: bold; }
     background: #ffffcc;
 }
 #org-div-home-and-up
-{ text-align: right; font-size: 70%; white-space: nowrap; }
+{ text-align: left;
+  width: min(70em, 100%);
+  margin: auto;
+  white-space: nowrap; }
 textarea { overflow-x: auto; }
 .linenr { font-size: smaller }
 .code-highlighted { background-color: var(--priority); }
@@ -295,7 +298,8 @@ textarea { overflow-x: auto; }
 { background-color: var(--text); color: var(--background); font-weight: bold; }
 .org-svg { }
 
-.index_heading > h3 {
+.index_heading > h2 {
     display: flex;
     justify-content: space-between;
 }
+
